@@ -155,7 +155,14 @@ function SkillCard({ name, level, endorsements, index }: SkillCardProps) {
         </div>
 
         {/* Proficiency bar */}
-        <div className="mb-2 h-2 overflow-hidden rounded-full bg-white/5">
+        <div
+          className="mb-2 h-2 overflow-hidden rounded-full bg-white/5"
+          role="progressbar"
+          aria-valuenow={config.percent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`${name} proficiency: ${config.percent}%`}
+        >
           <div
             ref={barRef}
             className={cn("h-full rounded-full bg-gradient-to-r", config.color)}

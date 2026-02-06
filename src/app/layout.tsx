@@ -44,10 +44,14 @@ const geistMono = Geist_Mono({
    ────────────────────────────────────────────── */
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://yadava5.github.io"),
   title: siteMetadata.title,
   description: siteMetadata.description,
   keywords: siteMetadata.keywords,
   authors: [{ name: "Ayush Yadav" }],
+  icons: {
+    icon: "/portfolio/favicon.svg",
+  },
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,

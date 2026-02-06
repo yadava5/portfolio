@@ -298,7 +298,11 @@ function ContactForm() {
         </div>
 
         {/* Error message */}
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && (
+          <p role="alert" className="text-sm text-red-400">
+            {error}
+          </p>
+        )}
 
         {/* Submit button */}
         <MagneticButton strength={0.2}>

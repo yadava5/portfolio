@@ -148,9 +148,9 @@ export const siteMetadata = {
   description:
     "Senior CS student at Miami University building data pipelines, ML systems, and full-stack applications. Open to internships and new-grad roles.",
   /** Site URL */
-  url: "https://ayushyadav.dev",
+  url: "https://yadava5.github.io/portfolio",
   /** Open Graph image path */
-  ogImage: "/og-image.png",
+  ogImage: "/portfolio/og-image.png",
   /** Twitter handle */
   twitterHandle: "@ayushyadav_dev",
   /** Keywords for SEO */
