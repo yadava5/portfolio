@@ -152,13 +152,10 @@ export function About() {
                   <p className="mt-1 text-sm text-white/60">Projects Built</p>
                 </div>
                 <div className="text-center">
-                  <div
-                    className="text-4xl font-bold text-purple-400"
-                    data-count={1}
-                  >
-                    0
+                  <div className="text-4xl font-bold text-purple-400">
+                    1M+
                   </div>
-                  <p className="mt-1 text-sm text-white/60">Million+ Rows</p>
+                  <p className="mt-1 text-sm text-white/60">Data Rows Processed</p>
                 </div>
                 <div className="text-center">
                   <div
@@ -193,41 +190,66 @@ export function About() {
                 </div>
 
                 {currentEducation && (
-                  <div className="flex flex-col gap-6 md:flex-row md:items-start">
+                  <div className="space-y-6">
                     {/* School info */}
-                    <div className="flex-1">
-                      <h4 className="text-xl font-semibold text-white">
-                        {currentEducation.school}
-                      </h4>
-                      <p className="mt-1 text-violet-400">
-                        {currentEducation.degree} in {currentEducation.field}
-                      </p>
-                      <div className="mt-2 flex items-center gap-2 text-sm text-white/60">
-                        <Calendar className="h-4 w-4" />
-                        <span>
-                          {formatDate(currentEducation.startDate)} —{" "}
-                          {formatDate(currentEducation.endDate)}
-                        </span>
+                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                      <div>
+                        <h4 className="text-xl font-semibold text-white">
+                          {currentEducation.school}
+                        </h4>
+                        <p className="mt-1 text-violet-400">
+                          {currentEducation.degree} in {currentEducation.field}
+                        </p>
+                        <div className="mt-2 flex items-center gap-2 text-sm text-white/60">
+                          <Calendar className="h-4 w-4" />
+                          <span>
+                            {formatDate(currentEducation.startDate)} —{" "}
+                            {formatDate(currentEducation.endDate)}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Relevant coursework */}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 text-sm font-medium text-white/80">
-                        <BookOpen className="h-4 w-4" />
+                    {/* Relevant coursework - enhanced grid */}
+                    <div>
+                      <div className="mb-4 flex items-center gap-2 text-sm font-medium text-white/80">
+                        <BookOpen className="h-4 w-4 text-violet-400" />
                         <span>Key Coursework</span>
                       </div>
-                      <ul className="mt-3 grid gap-2">
-                        {currentEducation.coursework.map((course, index) => (
-                          <li
-                            key={index}
-                            className="flex items-center gap-2 text-sm text-white/60"
-                          >
-                            <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
-                            {course}
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {currentEducation.coursework.map((course, index) => {
+                          const [code, ...rest] = course.split(" – ");
+                          const description = rest.join(" – ");
+                          const hasCode = description.length > 0;
+                          const colors = [
+                            "from-violet-500/20 to-purple-500/10 border-violet-500/30",
+                            "from-fuchsia-500/20 to-pink-500/10 border-fuchsia-500/30",
+                            "from-cyan-500/20 to-blue-500/10 border-cyan-500/30",
+                            "from-emerald-500/20 to-teal-500/10 border-emerald-500/30",
+                            "from-amber-500/20 to-orange-500/10 border-amber-500/30",
+                            "from-rose-500/20 to-red-500/10 border-rose-500/30",
+                          ];
+                          return (
+                            <div
+                              key={index}
+                              className={`group relative overflow-hidden rounded-xl border bg-gradient-to-br p-3 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${colors[index % colors.length]}`}
+                            >
+                              {hasCode ? (
+                                <>
+                                  <p className="font-mono text-xs font-semibold text-white/90">
+                                    {code}
+                                  </p>
+                                  <p className="mt-1 text-xs text-white/60 leading-relaxed">
+                                    {description}
+                                  </p>
+                                </>
+                              ) : (
+                                <p className="text-sm text-white/80">{course}</p>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 )}
