@@ -135,7 +135,10 @@ export function calculateDuration(startDate: string, endDate: string): string {
 export function formatDateRange(startDate: string, endDate: string): string {
   const formatMonth = (dateStr: string) => {
     const date = new Date(dateStr + "-01");
-    return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
   };
 
   const start = formatMonth(startDate);

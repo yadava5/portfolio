@@ -154,19 +154,19 @@ function MenuIcon({ open }: { open: boolean }) {
     <div className="relative h-5 w-6">
       <span
         className={cn(
-          "absolute left-0 block h-0.5 w-full rounded-full bg-foreground transition-all duration-300",
+          "bg-foreground absolute left-0 block h-0.5 w-full rounded-full transition-all duration-300",
           open ? "top-2.5 rotate-45" : "top-0.5"
         )}
       />
       <span
         className={cn(
-          "absolute left-0 top-2.5 block h-0.5 w-full rounded-full bg-foreground transition-opacity duration-300",
+          "bg-foreground absolute top-2.5 left-0 block h-0.5 w-full rounded-full transition-opacity duration-300",
           open ? "opacity-0" : "opacity-100"
         )}
       />
       <span
         className={cn(
-          "absolute left-0 block h-0.5 w-full rounded-full bg-foreground transition-all duration-300",
+          "bg-foreground absolute left-0 block h-0.5 w-full rounded-full transition-all duration-300",
           open ? "top-2.5 -rotate-45" : "top-[18px]"
         )}
       />
@@ -222,7 +222,7 @@ export default function Header() {
         "fixed top-0 right-0 left-0 z-50 transition-all duration-500",
         visible ? "translate-y-0" : "-translate-y-full",
         scrolled
-          ? "border-b border-[var(--glass-border)] bg-[var(--glass-background)] shadow-lg shadow-[var(--glass-shadow)] backdrop-blur-xl"
+          ? "border-b border-[var(--glass-border)] bg-[var(--glass-background)] shadow-[var(--glass-shadow)] shadow-lg backdrop-blur-xl"
           : "bg-transparent"
       )}
     >
@@ -237,7 +237,7 @@ export default function Header() {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="group relative text-lg font-bold tracking-tight text-foreground"
+          className="group text-foreground relative text-lg font-bold tracking-tight"
         >
           <span className="relative z-10">AY</span>
           <span
@@ -255,10 +255,10 @@ export default function Header() {
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
                 className={cn(
-                  "relative rounded-lg px-3 py-2 text-sm font-medium text-foreground-muted",
+                  "text-foreground-muted relative rounded-lg px-3 py-2 text-sm font-medium",
                   "transition-colors duration-[var(--transition-fast)]",
                   "hover:text-foreground",
-                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-primary"
+                  "focus-visible:outline-accent-primary focus-visible:outline-2 focus-visible:outline-offset-2"
                 )}
               >
                 {item.label}
@@ -279,9 +279,9 @@ export default function Header() {
           <button
             onClick={toggleTheme}
             className={cn(
-              "rounded-lg p-2 text-foreground-muted transition-colors duration-[var(--transition-fast)]",
-              "hover:bg-[var(--glass-background)] hover:text-foreground",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-primary"
+              "text-foreground-muted rounded-lg p-2 transition-colors duration-[var(--transition-fast)]",
+              "hover:text-foreground hover:bg-[var(--glass-background)]",
+              "focus-visible:outline-accent-primary focus-visible:outline-2 focus-visible:outline-offset-2"
             )}
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
@@ -292,9 +292,9 @@ export default function Header() {
           <button
             onClick={() => setMobileOpen((prev) => !prev)}
             className={cn(
-              "rounded-lg p-2 text-foreground-muted transition-colors duration-[var(--transition-fast)] md:hidden",
-              "hover:bg-[var(--glass-background)] hover:text-foreground",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-primary"
+              "text-foreground-muted rounded-lg p-2 transition-colors duration-[var(--transition-fast)] md:hidden",
+              "hover:text-foreground hover:bg-[var(--glass-background)]",
+              "focus-visible:outline-accent-primary focus-visible:outline-2 focus-visible:outline-offset-2"
             )}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
@@ -320,9 +320,9 @@ export default function Header() {
                 onClick={(e) => handleNavClick(e, item.href)}
                 tabIndex={mobileOpen ? 0 : -1}
                 className={cn(
-                  "block rounded-lg px-3 py-2.5 text-sm font-medium text-foreground-muted",
+                  "text-foreground-muted block rounded-lg px-3 py-2.5 text-sm font-medium",
                   "transition-colors duration-[var(--transition-fast)]",
-                  "hover:bg-[var(--glass-background)] hover:text-foreground"
+                  "hover:text-foreground hover:bg-[var(--glass-background)]"
                 )}
               >
                 {item.label}

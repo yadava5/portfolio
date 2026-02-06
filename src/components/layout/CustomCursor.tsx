@@ -15,11 +15,12 @@
 
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 /** Elements that trigger the "clickable" cursor expansion */
-const INTERACTIVE_SELECTOR = "a, button, [role='button'], input, textarea, select, [data-cursor='pointer']";
+const INTERACTIVE_SELECTOR =
+  "a, button, [role='button'], input, textarea, select, [data-cursor='pointer']";
 
 /** Elements that trigger the magnetic pull effect */
 const MAGNETIC_SELECTOR = "[data-cursor='magnetic']";
@@ -65,10 +66,17 @@ export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const [enabled, setEnabled] = useState(false);
+  const initialized = useRef(false);
 
   /* Only enable on devices with a fine pointer and no reduced-motion preference */
   useEffect(() => {
-    setEnabled(hasFinePointer() && !prefersReducedMotion());
+    if (initialized.current) return;
+    initialized.current = true;
+
+    /* Schedule state update to avoid synchronous cascading */
+    requestAnimationFrame(() => {
+      setEnabled(hasFinePointer() && !prefersReducedMotion());
+    });
   }, []);
 
   /* GSAP cursor tracking */
@@ -82,8 +90,14 @@ export default function CustomCursor() {
     /* quickTo creates a reusable tween for a single property — ideal for mousemove */
     const xDot = gsap.quickTo(dot, "x", { duration: 0.1, ease: "power2.out" });
     const yDot = gsap.quickTo(dot, "y", { duration: 0.1, ease: "power2.out" });
-    const xGlow = gsap.quickTo(glow, "x", { duration: 0.35, ease: "power3.out" });
-    const yGlow = gsap.quickTo(glow, "y", { duration: 0.35, ease: "power3.out" });
+    const xGlow = gsap.quickTo(glow, "x", {
+      duration: 0.35,
+      ease: "power3.out",
+    });
+    const yGlow = gsap.quickTo(glow, "y", {
+      duration: 0.35,
+      ease: "power3.out",
+    });
 
     /** Move both cursors toward the pointer position */
     function onMouseMove(e: MouseEvent) {
@@ -99,7 +113,12 @@ export default function CustomCursor() {
 
       if (target.closest(INTERACTIVE_SELECTOR)) {
         gsap.to(dot, { scale: 0.5, duration: 0.2, ease: "power2.out" });
-        gsap.to(glow, { scale: 1.8, opacity: 0.6, duration: 0.3, ease: "power2.out" });
+        gsap.to(glow, {
+          scale: 1.8,
+          opacity: 0.6,
+          duration: 0.3,
+          ease: "power2.out",
+        });
       }
 
       /* Magnetic pull: shift glow toward center of the magnetic element */
@@ -117,7 +136,12 @@ export default function CustomCursor() {
       const target = e.target as HTMLElement;
       if (target.closest(INTERACTIVE_SELECTOR)) {
         gsap.to(dot, { scale: 1, duration: 0.2, ease: "power2.out" });
-        gsap.to(glow, { scale: 1, opacity: 0.4, duration: 0.3, ease: "power2.out" });
+        gsap.to(glow, {
+          scale: 1,
+          opacity: 0.4,
+          duration: 0.3,
+          ease: "power2.out",
+        });
       }
     }
 
@@ -149,11 +173,14 @@ export default function CustomCursor() {
   if (!enabled) return null;
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[9999]">
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[9999]"
+    >
       {/* Dot — small, precise */}
       <div
         ref={dotRef}
-        className="absolute top-0 left-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground mix-blend-difference"
+        className="bg-foreground absolute top-0 left-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-difference"
       />
 
       {/* Glow ring — larger, trails behind */}

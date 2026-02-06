@@ -307,6 +307,8 @@ export function getProjectById(id: string): Project | undefined {
 /**
  * Get projects by category
  */
-export function getProjectsByCategory(category: Project["category"]): Project[] {
+export function getProjectsByCategory(
+  category: Project["category"]
+): Project[] {
   return projects.filter((p) => p.category === category);
 }

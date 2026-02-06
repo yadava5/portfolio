@@ -15,6 +15,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -47,9 +48,7 @@ function getInitialTheme(): Theme {
   const saved = localStorage.getItem(STORAGE_KEY) as Theme | null;
   if (saved === "dark" || saved === "light") return saved;
 
-  const prefersDark = window.matchMedia(
-    "(prefers-color-scheme: dark)"
-  ).matches;
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   return prefersDark ? "dark" : "light";
 }
 
@@ -95,13 +94,21 @@ interface ThemeProviderProps {
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [isLoaded, setIsLoaded] = useState(false);
+  const initialized = useRef(false);
 
-  /* Load theme from storage on mount */
+  /* Load theme from storage on mount (hydration-safe) */
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
     const initial = getInitialTheme();
-    setTheme(initial);
     applyTheme(initial);
-    setIsLoaded(true);
+
+    /* Schedule state update to avoid synchronous cascading */
+    requestAnimationFrame(() => {
+      setTheme(initial);
+      setIsLoaded(true);
+    });
   }, []);
 
   /** Toggles the theme and persists the new value */

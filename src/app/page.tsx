@@ -70,12 +70,12 @@ function SectionPlaceholder({
         />
 
         <p
-          className="mb-2 text-xs font-semibold uppercase tracking-[0.3em]"
+          className="mb-2 text-xs font-semibold tracking-[0.3em] uppercase"
           style={{ color: accent }}
         >
           Phase {5 + index}
         </p>
-        <h2 className="mb-3 text-3xl font-bold text-foreground">{title}</h2>
+        <h2 className="text-foreground mb-3 text-3xl font-bold">{title}</h2>
         <p className="text-foreground-muted">{subtitle}</p>
       </div>
     </section>
@@ -141,13 +141,13 @@ export default function Home() {
         />
 
         <div className="relative z-10 max-w-3xl text-center">
-          <p className="mb-4 text-sm font-medium uppercase tracking-[0.3em] text-accent-primary">
+          <p className="text-accent-primary mb-4 text-sm font-medium tracking-[0.3em] uppercase">
             Portfolio
           </p>
-          <h1 className="mb-6 text-5xl font-bold leading-tight tracking-tight text-foreground md:text-7xl">
+          <h1 className="text-foreground mb-6 text-5xl leading-tight font-bold tracking-tight md:text-7xl">
             Ayush Yadav
           </h1>
-          <p className="mb-8 text-lg text-foreground-muted md:text-xl">
+          <p className="text-foreground-muted mb-8 text-lg md:text-xl">
             Data Pipelines · AI/ML · Full-Stack Development
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -156,7 +156,7 @@ export default function Home() {
               className={cn(
                 "rounded-full px-8 py-3 text-sm font-semibold text-white",
                 "transition-all duration-[var(--transition-base)]",
-                "hover:shadow-lg hover:shadow-accent-primary/30"
+                "hover:shadow-accent-primary/30 hover:shadow-lg"
               )}
               style={{ background: "var(--accent-primary)" }}
             >
@@ -165,7 +165,7 @@ export default function Home() {
             <a
               href="#contact"
               className={cn(
-                "rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold text-foreground",
+                "text-foreground rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
                 "transition-all duration-[var(--transition-base)]",
                 "hover:border-accent-primary hover:text-accent-primary"
               )}

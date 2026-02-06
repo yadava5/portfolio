@@ -61,17 +61,17 @@ export default function Footer() {
         <div className="grid gap-10 md:grid-cols-3">
           {/* ── Column 1: Branding ── */}
           <div className="space-y-3">
-            <p className="text-lg font-bold tracking-tight text-foreground">
+            <p className="text-foreground text-lg font-bold tracking-tight">
               {personalInfo.name}
             </p>
-            <p className="max-w-xs text-sm leading-relaxed text-foreground-muted">
+            <p className="text-foreground-muted max-w-xs text-sm leading-relaxed">
               {personalInfo.bio[0]}
             </p>
           </div>
 
           {/* ── Column 2: Quick links ── */}
           <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-widest text-foreground-muted">
+            <p className="text-foreground-muted text-sm font-semibold tracking-widest uppercase">
               Navigate
             </p>
             <ul className="space-y-2" role="list">
@@ -80,7 +80,7 @@ export default function Footer() {
                   <a
                     href={link.href}
                     className={cn(
-                      "text-sm text-foreground-muted transition-colors duration-[var(--transition-fast)]",
+                      "text-foreground-muted text-sm transition-colors duration-[var(--transition-fast)]",
                       "hover:text-foreground"
                     )}
                   >
@@ -93,7 +93,7 @@ export default function Footer() {
 
           {/* ── Column 3: Social links ── */}
           <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-widest text-foreground-muted">
+            <p className="text-foreground-muted text-sm font-semibold tracking-widest uppercase">
               Connect
             </p>
             <div className="flex gap-3">
@@ -103,15 +103,13 @@ export default function Footer() {
                   href={social.url}
                   target={social.name !== "Email" ? "_blank" : undefined}
                   rel={
-                    social.name !== "Email"
-                      ? "noopener noreferrer"
-                      : undefined
+                    social.name !== "Email" ? "noopener noreferrer" : undefined
                   }
                   className={cn(
                     "flex h-10 w-10 items-center justify-center rounded-lg",
                     "border border-[var(--glass-border)] bg-[var(--glass-background)]",
                     "text-foreground-muted transition-all duration-[var(--transition-base)]",
-                    "hover:border-accent-primary hover:text-accent-primary hover:shadow-lg hover:shadow-accent-primary/20"
+                    "hover:border-accent-primary hover:text-accent-primary hover:shadow-accent-primary/20 hover:shadow-lg"
                   )}
                   aria-label={`Visit ${social.name}`}
                 >
@@ -132,10 +130,10 @@ export default function Footer() {
 
         {/* ── Bottom bar ── */}
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[var(--glass-border)] pt-6 sm:flex-row">
-          <p className="text-xs text-foreground-muted">
+          <p className="text-foreground-muted text-xs">
             &copy; {currentYear} {personalInfo.name}. All rights reserved.
           </p>
-          <p className="text-xs text-foreground-muted">
+          <p className="text-foreground-muted text-xs">
             Built with Next.js, Tailwind CSS &amp; GSAP
           </p>
         </div>

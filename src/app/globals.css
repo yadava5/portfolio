@@ -24,17 +24,17 @@
   --background-secondary: #0a0a1a;
   --foreground: #f0f0f5;
   --foreground-muted: #a0a0b0;
-  
+
   /* Accent colors */
   --accent-primary: #8b5cf6;
   --accent-secondary: #06b6d4;
   --accent-tertiary: #f472b6;
-  
+
   /* Glass effect colors */
   --glass-background: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-shadow: rgba(0, 0, 0, 0.5);
-  
+
   /* Holographic gradient */
   --holo-gradient: linear-gradient(
     135deg,
@@ -43,11 +43,11 @@
     hsl(340, 80%, 60%),
     hsl(280, 80%, 60%)
   );
-  
+
   /* Spacing */
   --section-padding: 6rem;
   --container-max: 1200px;
-  
+
   /* Animation timing */
   --transition-fast: 150ms;
   --transition-base: 300ms;
@@ -63,7 +63,7 @@
   --background-secondary: #f0f0f5;
   --foreground: #0a0a0a;
   --foreground-muted: #525252;
-  
+
   --glass-background: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(0, 0, 0, 0.1);
   --glass-shadow: rgba(0, 0, 0, 0.1);
@@ -106,7 +106,7 @@ body {
   html {
     scroll-behavior: auto;
   }
-  
+
   *,
   *::before,
   *::after {

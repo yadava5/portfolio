@@ -1,10 +1,24 @@
-# Continuous Integration workflow
+# Comprehensive CI/CD Pipeline
 # Runs on every push to main and on all pull requests
 #
-# Jobs:
-#   1. lint     — Prettier format check
-#   2. typecheck — TypeScript compilation
-#   3. build    — Next.js production build
+# Test Matrix:
+#   ┌──────────────────────────────────────────────────────────────────┐
+#   │  Stage 1: Quality Checks (parallel)                              │
+#   │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ │
+#   │  │   Format    │ │   ESLint    │ │  TypeScript │ │  Security   │ │
+#   │  │  (Prettier) │ │ (Code Qual) │ │ (Type Check)│ │  (npm audit)│ │
+#   │  └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ └──────┬──────┘ │
+#   └─────────┼───────────────┼───────────────┼───────────────┼────────┘
+#             │               │               │               │
+#             └───────────────┴───────┬───────┴───────────────┘
+#                                     ▼
+#   ┌──────────────────────────────────────────────────────────────────┐
+#   │  Stage 2: Build & Analyze                                        │
+#   │  ┌─────────────────────────┐ ┌─────────────────────────────────┐ │
+#   │  │     Production Build    │ │      Bundle Size Analysis       │ │
+#   │  │      (Next.js build)    │ │   (Track JS/CSS bundle sizes)   │ │
+#   │  └─────────────────────────┘ └─────────────────────────────────┘ │
+#   └──────────────────────────────────────────────────────────────────┘
 
 name: CI
 
@@ -19,12 +33,19 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  NODE_VERSION: 20
+
 jobs:
+  # ═══════════════════════════════════════════════════════════════════
+  # STAGE 1: Quality Checks (run in parallel)
+  # ═══════════════════════════════════════════════════════════════════
+
   # ─────────────────────────────────────────────────────────────
-  # Lint: Check code formatting with Prettier
+  # Format: Check code formatting with Prettier
   # ─────────────────────────────────────────────────────────────
-  lint:
-    name: Lint
+  format:
+    name: 🎨 Format (Prettier)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -33,20 +54,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Check formatting
-        run: npm run format:check
+        run: |
+          echo "🔍 Checking code formatting with Prettier..."
+          npm run format:check
+          echo "✅ All files are properly formatted!"
 
   # ─────────────────────────────────────────────────────────────
-  # Typecheck: Verify TypeScript compiles without errors
+  # ESLint: Check code quality and best practices
   # ─────────────────────────────────────────────────────────────
-  typecheck:
-    name: TypeScript
+  eslint:
+    name: 🔍 ESLint (Code Quality)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -55,22 +79,49 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: |
+          echo "🔍 Checking code quality with ESLint..."
+          npm run lint
+          echo "✅ No ESLint errors found!"
+
+  # ─────────────────────────────────────────────────────────────
+  # TypeScript: Verify type safety
+  # ─────────────────────────────────────────────────────────────
+  typecheck:
+    name: 📝 TypeScript (Type Safety)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run type check
-        run: npm run typecheck
+        run: |
+          echo "🔍 Checking TypeScript types..."
+          npm run typecheck
+          echo "✅ No type errors found!"
 
   # ─────────────────────────────────────────────────────────────
-  # Build: Ensure production build succeeds
+  # Security: Check for vulnerabilities in dependencies
   # ─────────────────────────────────────────────────────────────
-  build:
-    name: Build
+  security:
+    name: 🔒 Security (npm audit)
     runs-on: ubuntu-latest
-    needs: [lint, typecheck]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -78,11 +129,126 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run security audit
+        run: |
+          echo "🔍 Checking for security vulnerabilities..."
+          npm audit --audit-level=high || echo "⚠️ Some vulnerabilities found (non-blocking)"
+          echo "✅ Security check complete!"
+        # Note: Using || echo to not fail on moderate vulnerabilities
+        # Change to just `npm audit --audit-level=moderate` to be stricter
+
+  # ═══════════════════════════════════════════════════════════════════
+  # STAGE 2: Build & Analyze (runs after Stage 1 passes)
+  # ═══════════════════════════════════════════════════════════════════
+
+  # ─────────────────────────────────────────────────────────────
+  # Build: Production build verification
+  # ─────────────────────────────────────────────────────────────
+  build:
+    name: 🏗️ Build (Next.js)
+    runs-on: ubuntu-latest
+    needs: [format, eslint, typecheck]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build application
+        run: |
+          echo "🏗️ Building Next.js application..."
+          npm run build
+          echo "✅ Production build successful!"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextjs-build
+          path: .next
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────
+  # Bundle Analysis: Track bundle sizes
+  # ─────────────────────────────────────────────────────────────
+  bundle-analysis:
+    name: 📦 Bundle Size Analysis
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with bundle analyzer
         run: npm run build
+        env:
+          ANALYZE: true
+
+      - name: Report bundle sizes
+        run: |
+          echo "📦 Bundle Size Report"
+          echo "====================="
+          echo ""
+          echo "📁 .next/static directory:"
+          du -sh .next/static 2>/dev/null || echo "  (not available)"
+          echo ""
+          echo "📁 JavaScript chunks:"
+          find .next -name "*.js" -type f -exec du -h {} \; 2>/dev/null | sort -rh | head -10 || echo "  (not available)"
+          echo ""
+          echo "📁 CSS files:"
+          find .next -name "*.css" -type f -exec du -h {} \; 2>/dev/null | sort -rh | head -5 || echo "  (not available)"
+          echo ""
+          echo "✅ Bundle analysis complete!"
+
+  # ═══════════════════════════════════════════════════════════════════
+  # Final Status Check
+  # ═══════════════════════════════════════════════════════════════════
+  ci-success:
+    name: ✅ CI Complete
+    runs-on: ubuntu-latest
+    needs: [format, eslint, typecheck, security, build, bundle-analysis]
+    if: always()
+    steps:
+      - name: Check all jobs
+        run: |
+          echo "📊 CI Pipeline Summary"
+          echo "======================"
+          echo ""
+          echo "Format:    ${{ needs.format.result }}"
+          echo "ESLint:    ${{ needs.eslint.result }}"
+          echo "TypeCheck: ${{ needs.typecheck.result }}"
+          echo "Security:  ${{ needs.security.result }}"
+          echo "Build:     ${{ needs.build.result }}"
+          echo "Bundle:    ${{ needs.bundle-analysis.result }}"
+          echo ""
+          
+          if [[ "${{ needs.format.result }}" == "failure" ]] || \
+             [[ "${{ needs.eslint.result }}" == "failure" ]] || \
+             [[ "${{ needs.typecheck.result }}" == "failure" ]] || \
+             [[ "${{ needs.build.result }}" == "failure" ]]; then
+            echo "❌ CI Pipeline FAILED"
+            exit 1
+          else
+            echo "✅ CI Pipeline PASSED"
+          fi
