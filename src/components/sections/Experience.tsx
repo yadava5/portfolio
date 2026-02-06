@@ -16,13 +16,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import {
-  Briefcase,
-  MapPin,
-  Calendar,
-  ChevronDown,
-  ExternalLink,
-} from "lucide-react";
+import { Briefcase, MapPin, Calendar, ChevronDown } from "lucide-react";
 
 import { GlassCard } from "@/components/ui/GlassCard";
 import { ScrollReveal } from "@/components/effects/ScrollReveal";

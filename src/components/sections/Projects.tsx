@@ -14,7 +14,7 @@
 
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -346,19 +346,29 @@ export function Projects() {
     return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
   });
 
-  // Get active project
-  const activeProject =
-    sortedProjects.find((p) => p.id === activeProjectId) || sortedProjects[0];
+  // Get active project with fallback
+  const activeProject = useMemo(() => {
+    const found = sortedProjects.find((p) => p.id === activeProjectId);
+    return found || sortedProjects[0] || null;
+  }, [sortedProjects, activeProjectId]);
 
-  // Reset to first project when category changes
-  useEffect(() => {
-    if (
-      sortedProjects.length > 0 &&
-      !sortedProjects.find((p) => p.id === activeProjectId)
-    ) {
-      setActiveProjectId(sortedProjects[0].id);
+  const handleCategoryChange = useCallback((category: CategoryId) => {
+    setActiveCategory(category);
+    // Reset to first project of new category
+    const newFiltered =
+      category === "all"
+        ? projects
+        : projects.filter((p) => p.category === category);
+    if (newFiltered.length > 0) {
+      const sorted = [...newFiltered].sort((a, b) => {
+        if (a.featured !== b.featured) return a.featured ? -1 : 1;
+        return (
+          new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+        );
+      });
+      setActiveProjectId(sorted[0].id);
     }
-  }, [activeCategory, sortedProjects, activeProjectId]);
+  }, []);
 
   const handleProjectSelect = useCallback((project: Project) => {
     setActiveProjectId(project.id);
@@ -391,7 +401,7 @@ export function Projects() {
             {CATEGORIES.map((category) => (
               <button
                 key={category.id}
-                onClick={() => setActiveCategory(category.id)}
+                onClick={() => handleCategoryChange(category.id)}
                 className={cn(
                   "rounded-full px-5 py-2 text-sm font-medium transition-all duration-300",
                   activeCategory === category.id
