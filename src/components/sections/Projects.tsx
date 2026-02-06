@@ -1,21 +1,20 @@
 /**
- * @fileoverview Projects section with holographic bento grid
+ * @fileoverview Projects section with Spotlight Showcase design
  *
- * Displays portfolio projects in an interactive bento grid layout.
- * Featured projects are larger with holographic effects.
+ * Displays one featured project at a time with rich details,
+ * and a sidebar list to select between projects.
  *
  * Features:
- * - Bento grid layout with featured projects spanning multiple columns
- * - HoloCard effect for featured projects
- * - TiltCard 3D effect on hover
- * - Category filter tabs
- * - Project detail modal
+ * - Spotlight layout: one large showcase + selector list
+ * - Animated transitions between projects
+ * - Category filtering
+ * - Rich project details with tech stack and links
+ * - GSAP-powered entrance and switch animations
  */
 
 "use client";
 
-import { useState, useRef, useCallback } from "react";
-import { useEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -23,14 +22,11 @@ import {
   Github,
   Lock,
   ChevronRight,
-  X,
-  Calendar,
+  ArrowRight,
+  Sparkles,
 } from "lucide-react";
-import * as Dialog from "@radix-ui/react-dialog";
 
 import { GlassCard } from "@/components/ui/GlassCard";
-import { HoloCard } from "@/components/ui/HoloCard";
-import { TiltCard } from "@/components/ui/TiltCard";
 import { ScrollReveal } from "@/components/effects/ScrollReveal";
 import { projects, type Project } from "@/lib/data/projects";
 import { cn, formatDate } from "@/lib/utils";
@@ -41,7 +37,7 @@ if (typeof window !== "undefined") {
 
 /** Category filter options */
 const CATEGORIES = [
-  { id: "all", label: "All Projects" },
+  { id: "all", label: "All" },
   { id: "ai-ml", label: "AI/ML" },
   { id: "full-stack", label: "Full-Stack" },
   { id: "mobile", label: "Mobile" },
@@ -50,398 +46,293 @@ const CATEGORIES = [
 
 type CategoryId = (typeof CATEGORIES)[number]["id"];
 
-/** Props for project card */
-interface ProjectCardProps {
-  /** Project data */
-  project: Project;
-  /** Click handler to open modal */
-  onSelect: (project: Project) => void;
-  /** Animation delay index */
-  index: number;
-}
+/** Category colors */
+const CATEGORY_COLORS: Record<
+  string,
+  { bg: string; text: string; glow: string }
+> = {
+  "ai-ml": { bg: "bg-violet-500/20", text: "text-violet-300", glow: "#8b5cf6" },
+  "full-stack": {
+    bg: "bg-blue-500/20",
+    text: "text-blue-300",
+    glow: "#3b82f6",
+  },
+  mobile: { bg: "bg-orange-500/20", text: "text-orange-300", glow: "#f97316" },
+  data: { bg: "bg-emerald-500/20", text: "text-emerald-300", glow: "#10b981" },
+  other: { bg: "bg-gray-500/20", text: "text-gray-300", glow: "#6b7280" },
+};
 
 /**
- * Individual project card component
+ * Spotlight showcase for the active project
  */
-function ProjectCard({ project, onSelect, index }: ProjectCardProps) {
-  const handleClick = useCallback(() => {
-    onSelect(project);
-  }, [project, onSelect]);
+function ProjectSpotlight({ project }: { project: Project }) {
+  const spotlightRef = useRef<HTMLDivElement>(null);
+  const colors = CATEGORY_COLORS[project.category] || CATEGORY_COLORS.other;
 
-  const CardWrapper = project.featured ? HoloCard : GlassCard;
+  useEffect(() => {
+    if (!spotlightRef.current) return;
 
-  // Only the first featured project spans 2 columns for cleaner bento layout
-  const shouldSpanTwo = project.featured && index === 0;
+    // Animate in when project changes
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        spotlightRef.current,
+        { opacity: 0, y: 20, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }
+      );
+    });
+
+    return () => ctx.revert();
+  }, [project.id]);
 
   return (
-    <ScrollReveal
-      variant="slide-up"
-      delay={index * 0.1}
-      className={cn(shouldSpanTwo && "md:col-span-2")}
-    >
-      <TiltCard
-        className="h-full"
-        maxTilt={shouldSpanTwo ? 5 : 8}
-        perspective={1200}
-        enableGlare={shouldSpanTwo}
-      >
-        <CardWrapper
-          hoverable
-          className="group h-full cursor-pointer overflow-hidden"
-          onClick={handleClick}
-        >
-          {/* Project image placeholder */}
+    <div ref={spotlightRef} className="relative">
+      {/* Background glow */}
+      <div
+        className="absolute -inset-4 rounded-3xl opacity-20 blur-3xl"
+        style={{ background: colors.glow }}
+      />
+
+      <GlassCard variant="strong" className="relative overflow-hidden">
+        {/* Animated background pattern */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0f0f18] to-[#0a0a0f]" />
+
+          {/* Floating orbs */}
           <div
-            className={cn(
-              "relative overflow-hidden",
-              shouldSpanTwo ? "h-48 md:h-64" : "h-40"
-            )}
-          >
-            {/* Animated mesh gradient background */}
-            <div className="absolute inset-0 overflow-hidden">
-              {/* Base dark gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0f0f18] to-[#0a0a0f]" />
+            className="absolute -top-1/4 -left-1/4 h-96 w-96 animate-[float_8s_ease-in-out_infinite] rounded-full opacity-30 blur-3xl"
+            style={{ background: colors.glow }}
+          />
+          <div
+            className="absolute -right-1/4 -bottom-1/4 h-80 w-80 animate-[float_10s_ease-in-out_infinite_reverse] rounded-full opacity-20 blur-3xl"
+            style={{ background: colors.glow }}
+          />
 
-              {/* Animated floating orbs */}
-              <div
-                className={cn(
-                  "absolute -top-1/4 -left-1/4 h-[150%] w-[150%] rounded-full opacity-40 blur-3xl",
-                  "animate-[float_8s_ease-in-out_infinite]",
-                  project.category === "ai-ml" && "bg-violet-600",
-                  project.category === "full-stack" && "bg-blue-600",
-                  project.category === "mobile" && "bg-orange-500",
-                  project.category === "data" && "bg-emerald-500",
-                  project.category === "other" && "bg-slate-500"
-                )}
-                style={{ animationDelay: "0s" }}
-              />
-              <div
-                className={cn(
-                  "absolute -right-1/4 -bottom-1/4 h-[120%] w-[120%] rounded-full opacity-30 blur-3xl",
-                  "animate-[float_10s_ease-in-out_infinite_reverse]",
-                  project.category === "ai-ml" && "bg-fuchsia-600",
-                  project.category === "full-stack" && "bg-cyan-500",
-                  project.category === "mobile" && "bg-red-500",
-                  project.category === "data" && "bg-teal-400",
-                  project.category === "other" && "bg-gray-400"
-                )}
-                style={{ animationDelay: "-3s" }}
-              />
+          {/* Grid pattern */}
+          <div
+            className="absolute inset-0 opacity-[0.02]"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+              backgroundSize: "50px 50px",
+            }}
+          />
+        </div>
 
-              {/* Grid pattern overlay */}
-              <div
-                className="absolute inset-0 opacity-[0.03]"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                                    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-                  backgroundSize: "40px 40px",
-                }}
-              />
-
-              {/* Center glow */}
-              <div
-                className={cn(
-                  "absolute top-1/2 left-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-2xl",
-                  project.category === "ai-ml" && "bg-violet-500/50",
-                  project.category === "full-stack" && "bg-blue-500/50",
-                  project.category === "mobile" && "bg-orange-500/50",
-                  project.category === "data" && "bg-emerald-500/50",
-                  project.category === "other" && "bg-gray-500/50"
-                )}
-              />
-            </div>
-
-            {/* Category badge */}
-            <div className="absolute top-4 left-4 z-10">
-              <span
-                className={cn(
-                  "rounded-full px-3 py-1 text-xs font-medium capitalize backdrop-blur-sm",
-                  project.category === "ai-ml" &&
-                    "bg-violet-500/30 text-violet-200",
-                  project.category === "full-stack" &&
-                    "bg-blue-500/30 text-blue-200",
-                  project.category === "mobile" &&
-                    "bg-orange-500/30 text-orange-200",
-                  project.category === "data" &&
-                    "bg-emerald-500/30 text-emerald-200",
-                  project.category === "other" && "bg-gray-500/30 text-gray-200"
-                )}
-              >
-                {project.category.replace("-", "/")}
-              </span>
-            </div>
-
-            {/* Private badge */}
-            {project.isPrivate && (
-              <div className="absolute top-4 right-4 z-10">
-                <span className="flex items-center gap-1.5 rounded-full bg-amber-500/30 px-3 py-1 text-xs font-medium text-amber-200 backdrop-blur-sm">
-                  <Lock className="h-3 w-3" />
-                  Private
+        {/* Content */}
+        <div className="relative p-8 md:p-12">
+          {/* Header */}
+          <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div className="mb-3 flex flex-wrap items-center gap-3">
+                <span
+                  className={cn(
+                    "rounded-full px-4 py-1.5 text-sm font-medium capitalize",
+                    colors.bg,
+                    colors.text
+                  )}
+                >
+                  {project.category.replace("-", "/")}
                 </span>
+                {project.isPrivate && (
+                  <span className="flex items-center gap-1.5 rounded-full bg-amber-500/20 px-3 py-1.5 text-sm font-medium text-amber-300">
+                    <Lock className="h-3.5 w-3.5" />
+                    Private
+                  </span>
+                )}
+                {project.featured && (
+                  <span className="flex items-center gap-1.5 rounded-full bg-fuchsia-500/20 px-3 py-1.5 text-sm font-medium text-fuchsia-300">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Featured
+                  </span>
+                )}
               </div>
-            )}
 
-            {/* Hover overlay */}
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              <span className="flex items-center gap-2 text-sm font-medium text-white">
-                View Details
-                <ChevronRight className="h-4 w-4" />
-              </span>
+              <h3 className="text-3xl font-bold text-white md:text-4xl">
+                {project.title}
+              </h3>
+
+              <p className="mt-2 text-sm text-white/50">
+                {formatDate(project.startDate)} —{" "}
+                {project.endDate === "Present"
+                  ? "Present"
+                  : formatDate(project.endDate)}
+              </p>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-3">
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "flex items-center gap-2 rounded-full px-5 py-2.5",
+                    "bg-white/5 text-sm font-medium text-white",
+                    "border border-white/10 transition-all",
+                    "hover:border-white/20 hover:bg-white/10"
+                  )}
+                >
+                  <Github className="h-4 w-4" />
+                  View Code
+                </a>
+              )}
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "flex items-center gap-2 rounded-full px-5 py-2.5",
+                    "text-sm font-medium text-white",
+                    "transition-all hover:opacity-80"
+                  )}
+                  style={{ background: colors.glow }}
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Live Demo
+                </a>
+              )}
             </div>
           </div>
 
-          {/* Content */}
-          <div className="p-6">
-            <h3
-              className={cn(
-                "font-semibold text-white",
-                shouldSpanTwo ? "text-xl md:text-2xl" : "text-lg"
-              )}
-            >
-              {project.title}
-            </h3>
-            <p className="mt-2 line-clamp-2 text-sm text-white/60">
-              {project.shortDescription}
-            </p>
+          {/* Description */}
+          <p className="mb-8 max-w-3xl text-lg leading-relaxed text-white/70">
+            {project.fullDescription}
+          </p>
 
-            {/* Tech stack */}
-            <div className="mt-4 flex flex-wrap gap-2">
-              {project.techStack.slice(0, shouldSpanTwo ? 6 : 4).map((tech) => (
+          {/* Highlights */}
+          <div className="mb-8">
+            <h4 className="mb-4 text-sm font-semibold tracking-wider text-white/50 uppercase">
+              Key Highlights
+            </h4>
+            <ul className="grid gap-3 md:grid-cols-2">
+              {project.highlights.map((highlight, i) => (
+                <li key={i} className="flex items-start gap-3 text-white/60">
+                  <ChevronRight
+                    className="mt-0.5 h-4 w-4 shrink-0"
+                    style={{ color: colors.glow }}
+                  />
+                  <span>{highlight}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Tech Stack */}
+          <div>
+            <h4 className="mb-4 text-sm font-semibold tracking-wider text-white/50 uppercase">
+              Technologies
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {project.techStack.map((tech) => (
                 <span
                   key={tech.name}
-                  className="rounded-md bg-white/5 px-2 py-1 text-xs text-white/70"
+                  className="rounded-lg border border-white/5 bg-white/5 px-4 py-2 text-sm text-white/70"
                   style={{
-                    borderLeft: `2px solid ${tech.color || "#8b5cf6"}`,
+                    borderLeftWidth: 3,
+                    borderLeftColor: tech.color || colors.glow,
                   }}
                 >
                   {tech.name}
                 </span>
               ))}
-              {project.techStack.length > (shouldSpanTwo ? 6 : 4) && (
-                <span className="rounded-md bg-white/5 px-2 py-1 text-xs text-white/50">
-                  +{project.techStack.length - (shouldSpanTwo ? 6 : 4)} more
-                </span>
-              )}
-            </div>
-
-            {/* Links */}
-            <div className="mt-4 flex items-center gap-3">
-              {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-sm text-white/60 transition-colors hover:text-white"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Github className="h-4 w-4" />
-                  Code
-                </a>
-              )}
-              {project.liveUrl && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-sm text-white/60 transition-colors hover:text-white"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  Live Demo
-                </a>
-              )}
             </div>
           </div>
-        </CardWrapper>
-      </TiltCard>
-    </ScrollReveal>
+        </div>
+      </GlassCard>
+    </div>
   );
 }
 
 /**
- * Project detail modal
+ * Project list item in the sidebar
  */
-interface ProjectModalProps {
-  /** Currently selected project */
-  project: Project | null;
-  /** Whether modal is open */
-  isOpen: boolean;
-  /** Close handler */
-  onClose: () => void;
-}
-
-function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
-  if (!project) return null;
+function ProjectListItem({
+  project,
+  isActive,
+  onClick,
+  index,
+}: {
+  project: Project;
+  isActive: boolean;
+  onClick: () => void;
+  index: number;
+}) {
+  const colors = CATEGORY_COLORS[project.category] || CATEGORY_COLORS.other;
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/80 backdrop-blur-sm" />
-        <Dialog.Content
+    <button
+      onClick={onClick}
+      className={cn(
+        "group relative w-full text-left transition-all duration-300",
+        "rounded-xl border p-4",
+        isActive
+          ? "border-white/10 bg-white/5"
+          : "border-transparent bg-transparent hover:border-white/5 hover:bg-white/[0.02]"
+      )}
+    >
+      {/* Active indicator */}
+      {isActive && (
+        <div
+          className="absolute top-1/2 left-0 h-8 w-1 -translate-y-1/2 rounded-r-full"
+          style={{ background: colors.glow }}
+        />
+      )}
+
+      <div className="flex items-center gap-4">
+        {/* Number */}
+        <span
           className={cn(
-            "fixed top-1/2 left-1/2 z-50 w-[95vw] max-w-3xl -translate-x-1/2 -translate-y-1/2",
-            "max-h-[90vh] overflow-y-auto rounded-2xl",
-            "border border-white/10 bg-[#0a0a0f]/95 backdrop-blur-xl",
-            "shadow-2xl shadow-violet-500/10",
-            "data-[state=open]:animate-in data-[state=closed]:animate-out",
-            "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-            "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-            "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
-            "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]"
+            "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-mono text-sm",
+            isActive ? colors.bg : "bg-white/5",
+            isActive ? colors.text : "text-white/40"
           )}
         >
-          {/* Header */}
-          <div className="relative border-b border-white/10 p-6">
-            <Dialog.Close
-              className="absolute top-4 right-4 rounded-full p-2 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
-              aria-label="Close"
-            >
-              <X className="h-5 w-5" />
-            </Dialog.Close>
+          {String(index + 1).padStart(2, "0")}
+        </span>
 
-            <div className="flex items-start gap-4">
-              <div className="flex-1">
-                <div className="mb-2 flex flex-wrap items-center gap-2">
-                  <span
-                    className={cn(
-                      "rounded-full px-3 py-1 text-xs font-medium capitalize",
-                      project.category === "ai-ml" &&
-                        "bg-violet-500/30 text-violet-200",
-                      project.category === "full-stack" &&
-                        "bg-blue-500/30 text-blue-200",
-                      project.category === "mobile" &&
-                        "bg-orange-500/30 text-orange-200",
-                      project.category === "data" &&
-                        "bg-emerald-500/30 text-emerald-200",
-                      project.category === "other" &&
-                        "bg-gray-500/30 text-gray-200"
-                    )}
-                  >
-                    {project.category.replace("-", "/")}
-                  </span>
-                  {project.isPrivate && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-amber-500/30 px-3 py-1 text-xs font-medium text-amber-200">
-                      <Lock className="h-3 w-3" />
-                      Private
-                    </span>
-                  )}
-                </div>
+        {/* Info */}
+        <div className="min-w-0 flex-1">
+          <h4
+            className={cn(
+              "truncate font-medium transition-colors",
+              isActive
+                ? "text-white"
+                : "text-white/60 group-hover:text-white/80"
+            )}
+          >
+            {project.title}
+          </h4>
+          <p className="mt-0.5 truncate text-xs text-white/40">
+            {project.shortDescription.slice(0, 50)}...
+          </p>
+        </div>
 
-                <Dialog.Title className="text-2xl font-bold text-white md:text-3xl">
-                  {project.title}
-                </Dialog.Title>
-
-                <div className="mt-2 flex items-center gap-2 text-sm text-white/60">
-                  <Calendar className="h-4 w-4" />
-                  <span>
-                    {formatDate(project.startDate)} —{" "}
-                    {project.endDate === "Present"
-                      ? "Present"
-                      : formatDate(project.endDate)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Body */}
-          <div className="p-6">
-            {/* Description */}
-            <div className="mb-6">
-              <h4 className="mb-3 text-sm font-medium text-white/80">
-                About This Project
-              </h4>
-              <p className="leading-relaxed text-white/70">
-                {project.fullDescription}
-              </p>
-            </div>
-
-            {/* Highlights */}
-            <div className="mb-6">
-              <h4 className="mb-3 text-sm font-medium text-white/80">
-                Key Highlights
-              </h4>
-              <ul className="grid gap-2 md:grid-cols-2">
-                {project.highlights.map((highlight, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-3 text-sm text-white/60"
-                  >
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400" />
-                    {highlight}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Tech stack */}
-            <div className="mb-6">
-              <h4 className="mb-3 text-sm font-medium text-white/80">
-                Technologies Used
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {project.techStack.map((tech) => (
-                  <span
-                    key={tech.name}
-                    className="rounded-lg bg-white/5 px-3 py-1.5 text-sm text-white/70"
-                    style={{
-                      borderLeft: `3px solid ${tech.color || "#8b5cf6"}`,
-                    }}
-                  >
-                    {tech.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="flex flex-wrap gap-3">
-              {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    "flex items-center gap-2 rounded-full px-6 py-2.5",
-                    "bg-white/10 text-sm font-medium text-white",
-                    "transition-colors hover:bg-white/20"
-                  )}
-                >
-                  <Github className="h-4 w-4" />
-                  View Source
-                </a>
-              )}
-              {project.liveUrl && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    "flex items-center gap-2 rounded-full px-6 py-2.5",
-                    "bg-violet-600 text-sm font-medium text-white",
-                    "transition-colors hover:bg-violet-500"
-                  )}
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  Live Demo
-                </a>
-              )}
-            </div>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+        {/* Arrow */}
+        <ArrowRight
+          className={cn(
+            "h-4 w-4 shrink-0 transition-all",
+            isActive
+              ? "translate-x-0 opacity-100"
+              : "-translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-50"
+          )}
+          style={{ color: isActive ? colors.glow : undefined }}
+        />
+      </div>
+    </button>
   );
 }
 
 /**
- * Projects section with filterable bento grid
+ * Projects section with Spotlight Showcase design
  */
 export function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeCategory, setActiveCategory] = useState<CategoryId>("all");
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeProjectId, setActiveProjectId] = useState<string>(
+    projects[0]?.id
+  );
 
   // Filter projects by category
   const filteredProjects =
@@ -455,15 +346,22 @@ export function Projects() {
     return new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
   });
 
-  const handleProjectSelect = useCallback((project: Project) => {
-    setSelectedProject(project);
-    setIsModalOpen(true);
-  }, []);
+  // Get active project
+  const activeProject =
+    sortedProjects.find((p) => p.id === activeProjectId) || sortedProjects[0];
 
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen(false);
-    // Delay clearing project for animation
-    setTimeout(() => setSelectedProject(null), 200);
+  // Reset to first project when category changes
+  useEffect(() => {
+    if (
+      sortedProjects.length > 0 &&
+      !sortedProjects.find((p) => p.id === activeProjectId)
+    ) {
+      setActiveProjectId(sortedProjects[0].id);
+    }
+  }, [activeCategory, sortedProjects, activeProjectId]);
+
+  const handleProjectSelect = useCallback((project: Project) => {
+    setActiveProjectId(project.id);
   }, []);
 
   return (
@@ -472,7 +370,7 @@ export function Projects() {
       id="projects"
       className="relative min-h-screen py-24 md:py-32"
     >
-      <div className="container mx-auto max-w-6xl px-4">
+      <div className="container mx-auto max-w-7xl px-4">
         {/* Section header */}
         <ScrollReveal variant="slide-up" className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-bold md:text-5xl">
@@ -507,16 +405,32 @@ export function Projects() {
           </div>
         </ScrollReveal>
 
-        {/* Projects grid - bento layout with 2 columns */}
-        <div className="grid gap-6 md:grid-cols-2">
-          {sortedProjects.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onSelect={handleProjectSelect}
-              index={index}
-            />
-          ))}
+        {/* Spotlight layout */}
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+          {/* Main spotlight */}
+          <ScrollReveal variant="slide-up" delay={0.2}>
+            {activeProject && <ProjectSpotlight project={activeProject} />}
+          </ScrollReveal>
+
+          {/* Project list sidebar */}
+          <ScrollReveal variant="slide-left" delay={0.3}>
+            <GlassCard variant="subtle" className="p-4 lg:sticky lg:top-24">
+              <h3 className="mb-4 px-4 text-sm font-semibold tracking-wider text-white/50 uppercase">
+                All Projects ({sortedProjects.length})
+              </h3>
+              <div className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10 max-h-[600px] space-y-1 overflow-y-auto">
+                {sortedProjects.map((project, index) => (
+                  <ProjectListItem
+                    key={project.id}
+                    project={project}
+                    isActive={project.id === activeProjectId}
+                    onClick={() => handleProjectSelect(project)}
+                    index={index}
+                  />
+                ))}
+              </div>
+            </GlassCard>
+          </ScrollReveal>
         </div>
 
         {/* Empty state */}
@@ -528,13 +442,6 @@ export function Projects() {
           </div>
         )}
       </div>
-
-      {/* Project modal */}
-      <ProjectModal
-        project={selectedProject}
-        isOpen={isModalOpen}
-        onClose={handleModalClose}
-      />
     </section>
   );
 }
