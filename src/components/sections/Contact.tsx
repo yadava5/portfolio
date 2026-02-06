@@ -21,9 +21,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   Mail,
-  Phone,
   MapPin,
-  Send,
   Github,
   Linkedin,
   ExternalLink,
@@ -74,12 +72,6 @@ function ContactInfo() {
       label: "Email",
       value: personalInfo.email,
       href: `mailto:${personalInfo.email}`,
-    },
-    {
-      icon: <Phone className="h-5 w-5" />,
-      label: "Phone",
-      value: personalInfo.phone,
-      href: `tel:${personalInfo.phone.replace(/\D/g, "")}`,
     },
     {
       icon: <MapPin className="h-5 w-5" />,
@@ -410,30 +402,6 @@ export function Contact() {
             <ContactForm />
           </ScrollReveal>
         </div>
-
-        {/* CTA footer */}
-        <ScrollReveal
-          variant="slide-up"
-          delay={0.3}
-          className="mt-16 text-center"
-        >
-          <GlassCard className="inline-block px-8 py-6">
-            <p className="mb-4 text-white/70">
-              Prefer a scheduled call? Book a time that works for you.
-            </p>
-            <a
-              href={`mailto:${personalInfo.email}?subject=Meeting%20Request`}
-              className={cn(
-                "inline-flex items-center gap-2 rounded-lg px-6 py-3",
-                "bg-white/5 text-white/80 transition-all duration-300",
-                "hover:bg-white/10 hover:text-white"
-              )}
-            >
-              <Send className="h-4 w-4" />
-              Schedule a Call
-            </a>
-          </GlassCard>
-        </ScrollReveal>
       </div>
     </section>
   );

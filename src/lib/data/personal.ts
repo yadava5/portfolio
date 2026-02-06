@@ -57,8 +57,6 @@ export const personalInfo = {
   tagline: "Data Pipelines • AI/ML • Full-Stack Development",
   /** Email address */
   email: "aesh_1055@icloud.com",
-  /** Phone number */
-  phone: "+1 (513) 461-4375",
   /** Location */
   location: "Oxford, Ohio",
   /** Current availability */
