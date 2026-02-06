@@ -15,7 +15,7 @@
  */
 
 import { cn } from "@/lib/utils";
-import { Hero, About } from "@/components/sections";
+import { Hero, About, Experience } from "@/components/sections";
 
 /** Props for the placeholder section block */
 interface SectionPlaceholderProps {
@@ -86,11 +86,6 @@ function SectionPlaceholder({
 /** Section configuration for the home page */
 const SECTIONS = [
   {
-    id: "experience",
-    title: "Experience",
-    subtitle: "Interactive work timeline — coming in Phase 7",
-  },
-  {
     id: "projects",
     title: "Projects",
     subtitle: "Holographic project cards with tilt effect — coming in Phase 8",
@@ -124,6 +119,9 @@ export default function Home() {
 
       {/* About section */}
       <About />
+
+      {/* Experience section */}
+      <Experience />
 
       {/* Section placeholders */}
       {SECTIONS.map((section, i) => (
