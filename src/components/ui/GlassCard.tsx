@@ -114,7 +114,8 @@ export function GlassCard<T extends ElementType = "div">({
   className,
   children,
   ...props
-}: GlassCardProps<T> & Omit<ComponentPropsWithoutRef<T>, keyof GlassCardProps<T>>) {
+}: GlassCardProps<T> &
+  Omit<ComponentPropsWithoutRef<T>, keyof GlassCardProps<T>>) {
   const Component = as || "div";
 
   return (
