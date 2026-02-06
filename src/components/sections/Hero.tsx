@@ -245,49 +245,43 @@ export function Hero() {
 
         {/* CTA Buttons */}
         <div ref={ctaRef} className="mb-10 flex flex-wrap justify-center gap-4">
-          <MagneticButton
-            className={cn(
-              "rounded-full px-8 py-3 text-sm font-semibold text-white",
-              "transition-all duration-[var(--transition-base)]",
-              "hover:shadow-accent-primary/30 hover:shadow-lg"
-            )}
-            strength={0.2}
-          >
+          <MagneticButton strength={0.2}>
             <a
               href="#projects"
-              className="block"
-              style={{ background: "var(--accent-primary)" }}
+              className={cn(
+                "block rounded-full px-8 py-3 text-sm font-semibold text-white",
+                "bg-[var(--accent-primary)]",
+                "transition-all duration-[var(--transition-base)]",
+                "hover:shadow-lg hover:shadow-violet-500/30"
+              )}
             >
               View My Work
             </a>
           </MagneticButton>
 
-          <MagneticButton
-            className={cn(
-              "text-foreground rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
-              "transition-all duration-[var(--transition-base)]",
-              "hover:border-accent-primary hover:text-accent-primary"
-            )}
-            strength={0.2}
-          >
-            <a href="#contact" className="block">
+          <MagneticButton strength={0.2}>
+            <a
+              href="#contact"
+              className={cn(
+                "text-foreground block rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
+                "transition-all duration-[var(--transition-base)]",
+                "hover:border-violet-500 hover:text-violet-400"
+              )}
+            >
               Get in Touch
             </a>
           </MagneticButton>
 
-          <MagneticButton
-            className={cn(
-              "text-foreground rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
-              "transition-all duration-[var(--transition-base)]",
-              "hover:border-accent-secondary hover:text-accent-secondary"
-            )}
-            strength={0.2}
-          >
+          <MagneticButton strength={0.2}>
             <a
               href={personalInfo.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="block"
+              className={cn(
+                "text-foreground block rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
+                "transition-all duration-[var(--transition-base)]",
+                "hover:border-fuchsia-500 hover:text-fuchsia-400"
+              )}
             >
               Download CV
             </a>
