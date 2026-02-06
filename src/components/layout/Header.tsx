@@ -1,0 +1,336 @@
+/**
+ * @fileoverview Floating navigation header with glassmorphism effect
+ *
+ * Features:
+ * - Transparent → frosted glass on scroll (via IntersectionObserver)
+ * - Smooth anchor-link navigation to page sections
+ * - Theme toggle button (dark ↔ light)
+ * - Mobile hamburger menu with slide-in drawer
+ * - Hides on scroll-down, reveals on scroll-up
+ * - Holographic accent underline on active section
+ */
+
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useTheme } from "./ThemeProvider";
+
+/* ──────────────────────────────────────────────
+   Navigation items
+   ────────────────────────────────────────────── */
+
+/** Single navigation link definition */
+interface NavItem {
+  /** Display label */
+  label: string;
+  /** Anchor href (e.g. "#projects") */
+  href: string;
+}
+
+/** Ordered list of section links shown in the header */
+const NAV_ITEMS: NavItem[] = [
+  { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects", href: "#projects" },
+  { label: "Skills", href: "#skills" },
+  { label: "Contact", href: "#contact" },
+];
+
+/* ──────────────────────────────────────────────
+   Scroll-direction hook (show/hide header)
+   ────────────────────────────────────────────── */
+
+/** Minimum scroll delta (px) before toggling visibility */
+const SCROLL_THRESHOLD = 10;
+
+/**
+ * Tracks scroll direction to auto-hide/show the header
+ *
+ * @returns `true` when the header should be visible
+ */
+function useScrollDirection(): boolean {
+  const [visible, setVisible] = useState(true);
+  const lastY = useRef(0);
+
+  useEffect(() => {
+    function onScroll() {
+      const currentY = window.scrollY;
+      const diff = currentY - lastY.current;
+
+      if (Math.abs(diff) < SCROLL_THRESHOLD) return;
+
+      /* scrolling up → show, scrolling down → hide, at top → always show */
+      setVisible(diff < 0 || currentY < 80);
+      lastY.current = currentY;
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return visible;
+}
+
+/* ──────────────────────────────────────────────
+   "Scrolled past hero" detection
+   ────────────────────────────────────────────── */
+
+/**
+ * Returns `true` once the user has scrolled beyond the hero viewport
+ *
+ * Used to transition the header from fully transparent to frosted glass.
+ */
+function useHasScrolled(): boolean {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    function check() {
+      setScrolled(window.scrollY > 50);
+    }
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, []);
+
+  return scrolled;
+}
+
+/* ──────────────────────────────────────────────
+   Theme toggle icon (sun / moon)
+   ────────────────────────────────────────────── */
+
+/**
+ * Animated sun/moon icon for the theme toggle button
+ *
+ * @param props.isDark - Whether the current theme is dark
+ */
+function ThemeIcon({ isDark }: { isDark: boolean }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-5 w-5 transition-transform duration-300"
+      style={{ transform: isDark ? "rotate(0deg)" : "rotate(180deg)" }}
+      aria-hidden="true"
+    >
+      {isDark ? (
+        /* Moon icon */
+        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
+      ) : (
+        /* Sun icon */
+        <>
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   Mobile menu toggle icon
+   ────────────────────────────────────────────── */
+
+/**
+ * Animated hamburger ↔ X icon for the mobile menu
+ *
+ * @param props.open - Whether the mobile menu is open
+ */
+function MenuIcon({ open }: { open: boolean }) {
+  return (
+    <div className="relative h-5 w-6">
+      <span
+        className={cn(
+          "absolute left-0 block h-0.5 w-full rounded-full bg-foreground transition-all duration-300",
+          open ? "top-2.5 rotate-45" : "top-0.5"
+        )}
+      />
+      <span
+        className={cn(
+          "absolute left-0 top-2.5 block h-0.5 w-full rounded-full bg-foreground transition-opacity duration-300",
+          open ? "opacity-0" : "opacity-100"
+        )}
+      />
+      <span
+        className={cn(
+          "absolute left-0 block h-0.5 w-full rounded-full bg-foreground transition-all duration-300",
+          open ? "top-2.5 -rotate-45" : "top-[18px]"
+        )}
+      />
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────
+   Header component
+   ────────────────────────────────────────────── */
+
+/**
+ * Floating navigation header
+ *
+ * Renders a fixed-position nav bar that transitions from transparent to
+ * frosted glass on scroll, hides/shows based on scroll direction, and
+ * includes a mobile drawer for smaller viewports.
+ *
+ * @returns The rendered header element
+ */
+export default function Header() {
+  const { theme, toggleTheme } = useTheme();
+  const visible = useScrollDirection();
+  const scrolled = useHasScrolled();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  /** Close mobile menu on resize to desktop */
+  useEffect(() => {
+    function onResize() {
+      if (window.innerWidth >= 768) setMobileOpen(false);
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  /** Scroll to a section and close mobile menu */
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      e.preventDefault();
+      setMobileOpen(false);
+
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+    },
+    []
+  );
+
+  return (
+    <header
+      className={cn(
+        "fixed top-0 right-0 left-0 z-50 transition-all duration-500",
+        visible ? "translate-y-0" : "-translate-y-full",
+        scrolled
+          ? "border-b border-[var(--glass-border)] bg-[var(--glass-background)] shadow-lg shadow-[var(--glass-shadow)] backdrop-blur-xl"
+          : "bg-transparent"
+      )}
+    >
+      <nav
+        className="mx-auto flex max-w-[var(--container-max)] items-center justify-between px-6 py-4"
+        aria-label="Primary navigation"
+      >
+        {/* ── Logo / Name ── */}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className="group relative text-lg font-bold tracking-tight text-foreground"
+        >
+          <span className="relative z-10">AY</span>
+          <span
+            className="absolute -inset-x-2 -inset-y-1 -z-0 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            style={{ background: "var(--holo-gradient)", filter: "blur(8px)" }}
+            aria-hidden="true"
+          />
+        </a>
+
+        {/* ── Desktop links ── */}
+        <ul className="hidden items-center gap-1 md:flex" role="list">
+          {NAV_ITEMS.map((item) => (
+            <li key={item.href}>
+              <a
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
+                className={cn(
+                  "relative rounded-lg px-3 py-2 text-sm font-medium text-foreground-muted",
+                  "transition-colors duration-[var(--transition-fast)]",
+                  "hover:text-foreground",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-primary"
+                )}
+              >
+                {item.label}
+                {/* Holographic underline on hover */}
+                <span
+                  className="absolute bottom-0.5 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full transition-all duration-300 group-hover:w-4/5"
+                  style={{ background: "var(--holo-gradient)" }}
+                  aria-hidden="true"
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        {/* ── Right side actions ── */}
+        <div className="flex items-center gap-2">
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            className={cn(
+              "rounded-lg p-2 text-foreground-muted transition-colors duration-[var(--transition-fast)]",
+              "hover:bg-[var(--glass-background)] hover:text-foreground",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-primary"
+            )}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            <ThemeIcon isDark={theme === "dark"} />
+          </button>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className={cn(
+              "rounded-lg p-2 text-foreground-muted transition-colors duration-[var(--transition-fast)] md:hidden",
+              "hover:bg-[var(--glass-background)] hover:text-foreground",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-primary"
+            )}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          >
+            <MenuIcon open={mobileOpen} />
+          </button>
+        </div>
+      </nav>
+
+      {/* ── Mobile drawer ── */}
+      <div
+        className={cn(
+          "overflow-hidden border-t border-[var(--glass-border)] bg-[var(--glass-background)] backdrop-blur-xl transition-all duration-500 md:hidden",
+          mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+        )}
+        aria-hidden={!mobileOpen}
+      >
+        <ul className="flex flex-col gap-1 px-6 py-4" role="list">
+          {NAV_ITEMS.map((item) => (
+            <li key={item.href}>
+              <a
+                href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
+                tabIndex={mobileOpen ? 0 : -1}
+                className={cn(
+                  "block rounded-lg px-3 py-2.5 text-sm font-medium text-foreground-muted",
+                  "transition-colors duration-[var(--transition-fast)]",
+                  "hover:bg-[var(--glass-background)] hover:text-foreground"
+                )}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </header>
+  );
+}
