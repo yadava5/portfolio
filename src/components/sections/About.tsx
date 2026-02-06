@@ -152,10 +152,10 @@ export function About() {
                   <p className="mt-1 text-sm text-white/60">Projects Built</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-purple-400">
-                    1M+
-                  </div>
-                  <p className="mt-1 text-sm text-white/60">Data Rows Processed</p>
+                  <div className="text-4xl font-bold text-purple-400">1M+</div>
+                  <p className="mt-1 text-sm text-white/60">
+                    Data Rows Processed
+                  </p>
                 </div>
                 <div className="text-center">
                   <div
@@ -239,12 +239,14 @@ export function About() {
                                   <p className="font-mono text-xs font-semibold text-white/90">
                                     {code}
                                   </p>
-                                  <p className="mt-1 text-xs text-white/60 leading-relaxed">
+                                  <p className="mt-1 text-xs leading-relaxed text-white/60">
                                     {description}
                                   </p>
                                 </>
                               ) : (
-                                <p className="text-sm text-white/80">{course}</p>
+                                <p className="text-sm text-white/80">
+                                  {course}
+                                </p>
                               )}
                             </div>
                           );
