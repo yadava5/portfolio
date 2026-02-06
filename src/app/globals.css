@@ -188,6 +188,16 @@ body {
   }
 }
 
+/* Shimmer effect for skill cards */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* Fallback for browsers without @property support */
 @supports not (background: paint(something)) {
   @keyframes holo-rotate-fallback {

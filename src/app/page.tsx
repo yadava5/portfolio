@@ -15,7 +15,13 @@
  */
 
 import { cn } from "@/lib/utils";
-import { Hero, About, Experience, Projects } from "@/components/sections";
+import {
+  Hero,
+  About,
+  Experience,
+  Projects,
+  Skills,
+} from "@/components/sections";
 
 /** Props for the placeholder section block */
 interface SectionPlaceholderProps {
@@ -86,11 +92,6 @@ function SectionPlaceholder({
 /** Section configuration for the home page */
 const SECTIONS = [
   {
-    id: "skills",
-    title: "Skills",
-    subtitle: "Animated skill radar & category grid — coming in Phase 9",
-  },
-  {
     id: "contact",
     title: "Contact",
     subtitle: "Reach out form with glassmorphism — coming in Phase 10",
@@ -120,6 +121,9 @@ export default function Home() {
 
       {/* Projects section */}
       <Projects />
+
+      {/* Skills section */}
+      <Skills />
 
       {/* Section placeholders */}
       {SECTIONS.map((section, i) => (
