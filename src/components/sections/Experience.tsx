@@ -16,13 +16,12 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Briefcase, MapPin, Calendar, ChevronDown } from "lucide-react";
+import { MapPin, Calendar, ChevronDown } from "lucide-react";
 
 import { GlassCard } from "@/components/ui/GlassCard";
 import { ScrollReveal } from "@/components/effects/ScrollReveal";
 import {
   experiences,
-  calculateDuration,
   formatDateRange,
   type Experience as ExperienceType,
 } from "@/lib/data/experience";
@@ -49,7 +48,6 @@ function ExperienceCard({ experience, index, isLast }: ExperienceCardProps) {
   const [isExpanded, setIsExpanded] = useState(index === 0);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const duration = calculateDuration(experience.startDate, experience.endDate);
   const dateRange = formatDateRange(experience.startDate, experience.endDate);
   const isPresent = experience.endDate === "Present";
 
@@ -104,10 +102,6 @@ function ExperienceCard({ experience, index, isLast }: ExperienceCardProps) {
                   <span className="flex items-center gap-1.5">
                     <Calendar className="h-4 w-4" />
                     {dateRange}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Briefcase className="h-4 w-4" />
-                    {duration}
                   </span>
                   <span className="flex items-center gap-1.5">
                     <MapPin className="h-4 w-4" />

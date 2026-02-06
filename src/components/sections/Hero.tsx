@@ -240,7 +240,15 @@ export function Hero() {
           ref={subtitleRef}
           className="text-foreground-muted mx-auto mb-8 max-w-2xl text-base md:text-lg"
         >
-          {personalInfo.bio[0]}
+          {personalInfo.bio[0].split(/\*\*(.*?)\*\*/g).map((part, i) =>
+            i % 2 === 1 ? (
+              <span key={i} className="font-medium text-white/90">
+                {part}
+              </span>
+            ) : (
+              <span key={i}>{part}</span>
+            )
+          )}
         </p>
 
         {/* CTA Buttons */}

@@ -65,7 +65,7 @@ export default function Footer() {
               {personalInfo.name}
             </p>
             <p className="text-foreground-muted max-w-xs text-sm leading-relaxed">
-              {personalInfo.bio[0]}
+              {personalInfo.bio[0].replace(/\*\*/g, "")}
             </p>
           </div>
 
