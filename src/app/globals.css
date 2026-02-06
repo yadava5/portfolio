@@ -188,6 +188,16 @@ body {
   }
 }
 
+/* Floating particle animation for About section */
+@keyframes aboutFloat {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  100% {
+    transform: translateY(-30px) translateX(15px);
+  }
+}
+
 /* Shimmer effect for skill cards */
 @keyframes shimmer {
   0% {
