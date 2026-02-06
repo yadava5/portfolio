@@ -15,6 +15,7 @@
  */
 
 import { cn } from "@/lib/utils";
+import { Hero } from "@/components/sections";
 
 /** Props for the placeholder section block */
 interface SectionPlaceholderProps {
@@ -123,58 +124,8 @@ const SECTIONS = [
 export default function Home() {
   return (
     <>
-      {/* Hero section placeholder */}
-      <section
-        id="hero"
-        className="relative flex min-h-screen items-center justify-center overflow-hidden px-6"
-      >
-        {/* Background gradient orbs */}
-        <div
-          className="absolute top-1/4 -left-32 h-96 w-96 rounded-full opacity-20 blur-[120px]"
-          style={{ background: "var(--accent-primary)" }}
-          aria-hidden="true"
-        />
-        <div
-          className="absolute right-0 bottom-1/4 h-80 w-80 rounded-full opacity-15 blur-[100px]"
-          style={{ background: "var(--accent-secondary)" }}
-          aria-hidden="true"
-        />
-
-        <div className="relative z-10 max-w-3xl text-center">
-          <p className="text-accent-primary mb-4 text-sm font-medium tracking-[0.3em] uppercase">
-            Portfolio
-          </p>
-          <h1 className="text-foreground mb-6 text-5xl leading-tight font-bold tracking-tight md:text-7xl">
-            Ayush Yadav
-          </h1>
-          <p className="text-foreground-muted mb-8 text-lg md:text-xl">
-            Data Pipelines · AI/ML · Full-Stack Development
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="#projects"
-              className={cn(
-                "rounded-full px-8 py-3 text-sm font-semibold text-white",
-                "transition-all duration-[var(--transition-base)]",
-                "hover:shadow-accent-primary/30 hover:shadow-lg"
-              )}
-              style={{ background: "var(--accent-primary)" }}
-            >
-              View Projects
-            </a>
-            <a
-              href="#contact"
-              className={cn(
-                "text-foreground rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
-                "transition-all duration-[var(--transition-base)]",
-                "hover:border-accent-primary hover:text-accent-primary"
-              )}
-            >
-              Get in Touch
-            </a>
-          </div>
-        </div>
-      </section>
+      {/* Hero section */}
+      <Hero />
 
       {/* Section placeholders */}
       {SECTIONS.map((section, i) => (
