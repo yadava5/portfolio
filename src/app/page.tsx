@@ -20,7 +20,6 @@ import {
   Experience,
   Projects,
   Skills,
-  Testimonials,
   Contact,
 } from "@/components/sections";
 
@@ -49,9 +48,6 @@ export default function Home() {
 
       {/* Skills section */}
       <Skills />
-
-      {/* Testimonials section */}
-      <Testimonials />
 
       {/* Contact section */}
       <Contact />
