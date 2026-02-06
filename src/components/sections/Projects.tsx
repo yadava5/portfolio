@@ -97,22 +97,59 @@ function ProjectCard({ project, onSelect, index }: ProjectCardProps) {
               shouldSpanTwo ? "h-48 md:h-64" : "h-40"
             )}
           >
-            {/* Gradient placeholder for project image */}
-            <div
-              className={cn(
-                "absolute inset-0 bg-gradient-to-br",
-                project.category === "ai-ml" &&
-                  "from-violet-600/30 to-purple-900/50",
-                project.category === "full-stack" &&
-                  "from-blue-600/30 to-cyan-900/50",
-                project.category === "mobile" &&
-                  "from-orange-600/30 to-red-900/50",
-                project.category === "data" &&
-                  "from-emerald-600/30 to-teal-900/50",
-                project.category === "other" &&
-                  "from-gray-600/30 to-slate-900/50"
-              )}
-            />
+            {/* Animated mesh gradient background */}
+            <div className="absolute inset-0 overflow-hidden">
+              {/* Base dark gradient */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0f0f18] to-[#0a0a0f]" />
+
+              {/* Animated floating orbs */}
+              <div
+                className={cn(
+                  "absolute -top-1/4 -left-1/4 h-[150%] w-[150%] rounded-full opacity-40 blur-3xl",
+                  "animate-[float_8s_ease-in-out_infinite]",
+                  project.category === "ai-ml" && "bg-violet-600",
+                  project.category === "full-stack" && "bg-blue-600",
+                  project.category === "mobile" && "bg-orange-500",
+                  project.category === "data" && "bg-emerald-500",
+                  project.category === "other" && "bg-slate-500"
+                )}
+                style={{ animationDelay: "0s" }}
+              />
+              <div
+                className={cn(
+                  "absolute -right-1/4 -bottom-1/4 h-[120%] w-[120%] rounded-full opacity-30 blur-3xl",
+                  "animate-[float_10s_ease-in-out_infinite_reverse]",
+                  project.category === "ai-ml" && "bg-fuchsia-600",
+                  project.category === "full-stack" && "bg-cyan-500",
+                  project.category === "mobile" && "bg-red-500",
+                  project.category === "data" && "bg-teal-400",
+                  project.category === "other" && "bg-gray-400"
+                )}
+                style={{ animationDelay: "-3s" }}
+              />
+
+              {/* Grid pattern overlay */}
+              <div
+                className="absolute inset-0 opacity-[0.03]"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                                    linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+                  backgroundSize: "40px 40px",
+                }}
+              />
+
+              {/* Center glow */}
+              <div
+                className={cn(
+                  "absolute top-1/2 left-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-50 blur-2xl",
+                  project.category === "ai-ml" && "bg-violet-500/50",
+                  project.category === "full-stack" && "bg-blue-500/50",
+                  project.category === "mobile" && "bg-orange-500/50",
+                  project.category === "data" && "bg-emerald-500/50",
+                  project.category === "other" && "bg-gray-500/50"
+                )}
+              />
+            </div>
 
             {/* Category badge */}
             <div className="absolute top-4 left-4 z-10">
