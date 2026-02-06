@@ -10,4 +10,5 @@ export { About } from "./About";
 export { Experience } from "./Experience";
 export { Projects } from "./Projects";
 export { Skills } from "./Skills";
+export { Testimonials } from "./Testimonials";
 export { Contact } from "./Contact";

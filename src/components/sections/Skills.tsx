@@ -81,11 +81,10 @@ const LEVEL_CONFIG: Record<
 interface SkillCardProps {
   name: string;
   level: SkillLevel;
-  endorsements?: number;
   index: number;
 }
 
-function SkillCard({ name, level, endorsements, index }: SkillCardProps) {
+function SkillCard({ name, level, index }: SkillCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const config = LEVEL_CONFIG[level];
@@ -143,15 +142,9 @@ function SkillCard({ name, level, endorsements, index }: SkillCardProps) {
       />
 
       <div className="relative z-10 p-4">
-        {/* Skill name and endorsements */}
-        <div className="mb-3 flex items-center justify-between">
+        {/* Skill name */}
+        <div className="mb-3">
           <h4 className="font-semibold text-white/90">{name}</h4>
-          {endorsements && endorsements > 0 && (
-            <span className="rounded-full bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 px-2 py-0.5 text-xs text-violet-300">
-              {endorsements}{" "}
-              {endorsements === 1 ? "endorsement" : "endorsements"}
-            </span>
-          )}
         </div>
 
         {/* Proficiency bar */}
@@ -319,12 +312,7 @@ export function Skills() {
         <div ref={gridRef} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {activeSkillCategory?.skills.map((skill, index) => (
             <div key={skill.name} data-skill-card>
-              <SkillCard
-                name={skill.name}
-                level={skill.level}
-                endorsements={skill.endorsements}
-                index={index}
-              />
+              <SkillCard name={skill.name} level={skill.level} index={index} />
             </div>
           ))}
         </div>
