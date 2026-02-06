@@ -428,7 +428,10 @@ export function Projects() {
               <h3 className="mb-4 px-4 text-sm font-semibold tracking-wider text-white/50 uppercase">
                 All Projects ({sortedProjects.length})
               </h3>
-              <div className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10 max-h-[600px] space-y-1 overflow-y-auto">
+              <div
+                data-lenis-prevent
+                className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10 max-h-[600px] space-y-1 overflow-y-auto"
+              >
                 {sortedProjects.map((project, index) => (
                   <ProjectListItem
                     key={project.id}
