@@ -208,7 +208,7 @@ export function Hero() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
           </span>
-          <span className="text-sm text-foreground-muted">
+          <span className="text-foreground-muted text-sm">
             {personalInfo.availability}
           </span>
         </div>
@@ -216,7 +216,7 @@ export function Hero() {
         {/* Name heading */}
         <h1
           ref={headingRef}
-          className="mb-4 text-5xl font-bold leading-tight tracking-tight text-foreground md:text-7xl lg:text-8xl"
+          className="text-foreground mb-4 text-5xl leading-tight font-bold tracking-tight md:text-7xl lg:text-8xl"
         >
           <span className="block">Hi, I&apos;m</span>
           <span
@@ -230,7 +230,7 @@ export function Hero() {
         {/* Tagline */}
         <p
           ref={taglineRef}
-          className="mb-4 text-lg font-medium tracking-wide text-accent-primary md:text-xl"
+          className="text-accent-primary mb-4 text-lg font-medium tracking-wide md:text-xl"
         >
           {personalInfo.tagline}
         </p>
@@ -238,7 +238,7 @@ export function Hero() {
         {/* Subtitle / short bio */}
         <p
           ref={subtitleRef}
-          className="mx-auto mb-8 max-w-2xl text-base text-foreground-muted md:text-lg"
+          className="text-foreground-muted mx-auto mb-8 max-w-2xl text-base md:text-lg"
         >
           {personalInfo.bio[0]}
         </p>
@@ -249,7 +249,7 @@ export function Hero() {
             className={cn(
               "rounded-full px-8 py-3 text-sm font-semibold text-white",
               "transition-all duration-[var(--transition-base)]",
-              "hover:shadow-lg hover:shadow-accent-primary/30"
+              "hover:shadow-accent-primary/30 hover:shadow-lg"
             )}
             strength={0.2}
           >
@@ -264,7 +264,7 @@ export function Hero() {
 
           <MagneticButton
             className={cn(
-              "rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold text-foreground",
+              "text-foreground rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
               "transition-all duration-[var(--transition-base)]",
               "hover:border-accent-primary hover:text-accent-primary"
             )}
@@ -277,7 +277,7 @@ export function Hero() {
 
           <MagneticButton
             className={cn(
-              "rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold text-foreground",
+              "text-foreground rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
               "transition-all duration-[var(--transition-base)]",
               "hover:border-accent-secondary hover:text-accent-secondary"
             )}
@@ -308,7 +308,7 @@ export function Hero() {
                 "text-foreground-muted backdrop-blur-sm",
                 "transition-all duration-[var(--transition-base)]",
                 "hover:border-accent-primary hover:text-accent-primary",
-                "hover:shadow-lg hover:shadow-accent-primary/20"
+                "hover:shadow-accent-primary/20 hover:shadow-lg"
               )}
               aria-label={`Visit ${social.name}`}
             >
@@ -328,10 +328,10 @@ export function Hero() {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div className="flex flex-col items-center gap-2 text-foreground-muted">
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <div className="h-12 w-6 rounded-full border-2 border-foreground-muted/30 p-1">
-            <div className="h-2 w-full animate-bounce rounded-full bg-foreground-muted/50" />
+        <div className="text-foreground-muted flex flex-col items-center gap-2">
+          <span className="text-xs tracking-widest uppercase">Scroll</span>
+          <div className="border-foreground-muted/30 h-12 w-6 rounded-full border-2 p-1">
+            <div className="bg-foreground-muted/50 h-2 w-full animate-bounce rounded-full" />
           </div>
         </div>
       </div>
