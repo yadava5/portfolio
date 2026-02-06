@@ -9,3 +9,4 @@ export { GlassCard } from "./GlassCard";
 export { HoloCard } from "./HoloCard";
 export { TiltCard } from "./TiltCard";
 export { ParticlesBg } from "./ParticlesBg";
+export { MagneticButton } from "./MagneticButton";
