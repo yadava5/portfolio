@@ -70,17 +70,20 @@ function ProjectCard({ project, onSelect, index }: ProjectCardProps) {
 
   const CardWrapper = project.featured ? HoloCard : GlassCard;
 
+  // Only the first featured project spans 2 columns for cleaner bento layout
+  const shouldSpanTwo = project.featured && index === 0;
+
   return (
     <ScrollReveal
       variant="slide-up"
       delay={index * 0.1}
-      className={cn(project.featured && "md:col-span-2")}
+      className={cn(shouldSpanTwo && "md:col-span-2")}
     >
       <TiltCard
         className="h-full"
-        maxTilt={project.featured ? 5 : 8}
+        maxTilt={shouldSpanTwo ? 5 : 8}
         perspective={1200}
-        enableGlare={project.featured}
+        enableGlare={shouldSpanTwo}
       >
         <CardWrapper
           hoverable
@@ -91,7 +94,7 @@ function ProjectCard({ project, onSelect, index }: ProjectCardProps) {
           <div
             className={cn(
               "relative overflow-hidden",
-              project.featured ? "h-48 md:h-64" : "h-40"
+              shouldSpanTwo ? "h-48 md:h-64" : "h-40"
             )}
           >
             {/* Gradient placeholder for project image */}
@@ -155,7 +158,7 @@ function ProjectCard({ project, onSelect, index }: ProjectCardProps) {
             <h3
               className={cn(
                 "font-semibold text-white",
-                project.featured ? "text-xl md:text-2xl" : "text-lg"
+                shouldSpanTwo ? "text-xl md:text-2xl" : "text-lg"
               )}
             >
               {project.title}
@@ -166,22 +169,20 @@ function ProjectCard({ project, onSelect, index }: ProjectCardProps) {
 
             {/* Tech stack */}
             <div className="mt-4 flex flex-wrap gap-2">
-              {project.techStack
-                .slice(0, project.featured ? 6 : 4)
-                .map((tech) => (
-                  <span
-                    key={tech.name}
-                    className="rounded-md bg-white/5 px-2 py-1 text-xs text-white/70"
-                    style={{
-                      borderLeft: `2px solid ${tech.color || "#8b5cf6"}`,
-                    }}
-                  >
-                    {tech.name}
-                  </span>
-                ))}
-              {project.techStack.length > (project.featured ? 6 : 4) && (
+              {project.techStack.slice(0, shouldSpanTwo ? 6 : 4).map((tech) => (
+                <span
+                  key={tech.name}
+                  className="rounded-md bg-white/5 px-2 py-1 text-xs text-white/70"
+                  style={{
+                    borderLeft: `2px solid ${tech.color || "#8b5cf6"}`,
+                  }}
+                >
+                  {tech.name}
+                </span>
+              ))}
+              {project.techStack.length > (shouldSpanTwo ? 6 : 4) && (
                 <span className="rounded-md bg-white/5 px-2 py-1 text-xs text-white/50">
-                  +{project.techStack.length - (project.featured ? 6 : 4)} more
+                  +{project.techStack.length - (shouldSpanTwo ? 6 : 4)} more
                 </span>
               )}
             </div>
@@ -469,8 +470,8 @@ export function Projects() {
           </div>
         </ScrollReveal>
 
-        {/* Projects grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Projects grid - bento layout with 2 columns */}
+        <div className="grid gap-6 md:grid-cols-2">
           {sortedProjects.map((project, index) => (
             <ProjectCard
               key={project.id}
