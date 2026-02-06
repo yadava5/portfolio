@@ -416,7 +416,7 @@ export function Projects() {
         </ScrollReveal>
 
         {/* Spotlight layout */}
-        <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
           {/* Main spotlight */}
           <ScrollReveal variant="slide-up" delay={0.2}>
             {activeProject && <ProjectSpotlight project={activeProject} />}
@@ -424,13 +424,16 @@ export function Projects() {
 
           {/* Project list sidebar */}
           <ScrollReveal variant="slide-left" delay={0.3}>
-            <GlassCard variant="subtle" className="p-4 lg:sticky lg:top-24">
-              <h3 className="mb-4 px-4 text-sm font-semibold tracking-wider text-white/50 uppercase">
+            <GlassCard
+              variant="subtle"
+              className="flex max-h-[500px] flex-col p-4 lg:sticky lg:top-24"
+            >
+              <h3 className="mb-4 shrink-0 px-4 text-sm font-semibold tracking-wider text-white/50 uppercase">
                 All Projects ({sortedProjects.length})
               </h3>
               <div
                 data-lenis-prevent
-                className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10 max-h-[600px] space-y-1 overflow-y-auto"
+                className="scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/10 min-h-0 flex-1 space-y-1 overflow-y-auto"
               >
                 {sortedProjects.map((project, index) => (
                   <ProjectListItem
