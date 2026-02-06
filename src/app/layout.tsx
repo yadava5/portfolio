@@ -17,7 +17,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import SmoothScroll from "@/components/layout/SmoothScroll";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CustomCursor from "@/components/layout/CustomCursor";
