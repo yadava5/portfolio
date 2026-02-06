@@ -17,6 +17,9 @@ import {
   Calendar,
   BookOpen,
   ChevronDown,
+  Database,
+  Code2,
+  Brain,
 } from "lucide-react";
 
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -103,31 +106,80 @@ export function About() {
             delay={0.1}
             className="md:col-span-2"
           >
-            <GlassCard variant="strong" className="h-full p-6 md:p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20">
-                  <MapPin className="h-5 w-5 text-violet-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-white">
-                    {personalInfo.name}
-                  </h3>
-                  <p className="text-sm text-white/60">
-                    {personalInfo.location}
-                  </p>
-                </div>
-              </div>
+            <GlassCard
+              variant="strong"
+              className="relative h-full overflow-hidden p-6 md:p-8"
+            >
+              {/* Decorative gradient orb */}
+              <div className="pointer-events-none absolute -top-20 -right-20 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-20 -left-20 h-40 w-40 rounded-full bg-fuchsia-500/10 blur-3xl" />
 
-              <div className="space-y-4">
-                {personalInfo.bio.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="leading-relaxed text-white/80"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+              <div className="relative">
+                {/* Header with name and location */}
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20">
+                    <MapPin className="h-5 w-5 text-violet-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-white">
+                      {personalInfo.name}
+                    </h3>
+                    <p className="text-sm text-white/60">
+                      {personalInfo.location}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Bio with highlighted keywords */}
+                <div className="space-y-4">
+                  {personalInfo.bio.map((paragraph, index) => (
+                    <p
+                      key={index}
+                      className="text-[15px] leading-relaxed text-white/60"
+                    >
+                      {paragraph.split(/\*\*(.*?)\*\*/g).map((part, i) =>
+                        i % 2 === 1 ? (
+                          <span key={i} className="font-medium text-white/90">
+                            {part}
+                          </span>
+                        ) : (
+                          <span key={i}>{part}</span>
+                        )
+                      )}
+                    </p>
+                  ))}
+                </div>
+
+                {/* Focus areas row */}
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {[
+                    {
+                      icon: Database,
+                      label: "Data Engineering",
+                      color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+                    },
+                    {
+                      icon: Brain,
+                      label: "Machine Learning",
+                      color:
+                        "text-violet-400 bg-violet-500/10 border-violet-500/20",
+                    },
+                    {
+                      icon: Code2,
+                      label: "Full-Stack Dev",
+                      color:
+                        "text-fuchsia-400 bg-fuchsia-500/10 border-fuchsia-500/20",
+                    },
+                  ].map((focus) => (
+                    <span
+                      key={focus.label}
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium ${focus.color}`}
+                    >
+                      <focus.icon className="h-3 w-3" />
+                      {focus.label}
+                    </span>
+                  ))}
+                </div>
               </div>
             </GlassCard>
           </ScrollReveal>

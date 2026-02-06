@@ -62,11 +62,11 @@ export const personalInfo = {
   /** Current availability */
   availability: "Open to internships and new-grad roles",
 
-  /** Bio paragraphs for about section */
+  /** Bio paragraphs for about section - supports **bold** markup for highlights */
   bio: [
-    "Senior Computer Science student graduating May 2026, focused on data pipelines, applied machine learning, and building reliable software systems end-to-end.",
-    "I currently work as an ITSM Data Integration Student Associate at Miami University, where I build Python/SQL pipelines processing 1M+ rows, translate messy operational data into trusted datasets, and ship dashboards and automations that teams actually use.",
-    "I enjoy backend/full-stack engineering, data engineering, and ML-adjacent product work—especially where performance, reliability, and clear user impact matter.",
+    "Senior **Computer Science** student graduating **May 2026**, focused on **data pipelines**, **applied machine learning**, and building reliable software systems end-to-end.",
+    "I currently work as an **ITSM Data Integration Student Associate** at Miami University, where I build **Python/SQL pipelines** processing **1M+ rows**, translate messy operational data into trusted datasets, and ship dashboards and automations that teams actually use.",
+    "I enjoy **backend/full-stack engineering**, **data engineering**, and **ML-adjacent product work**—especially where performance, reliability, and clear user impact matter.",
   ],
 
   /** Resume file path */
@@ -105,8 +105,6 @@ export const education: Education[] = [
       "CSE 432 – Machine Learning: Predictive models, large dataset projects",
       "CSE 443 – High Performance Computing: Parallel/multiprocessor programming",
       "CSE 484 – Algorithms II: NP-completeness, approximation algorithms",
-      "MTH 151 – Calculus I: Limits, derivatives, integration of polynomial & trig functions",
-      "MTH 251 – Calculus II: Integration techniques, polar coordinates, infinite series",
       "MTH 252 – Calculus III: 3D geometry, vectors, multiple integrals",
       "MTH 222 – Linear Algebra: Matrix algebra, determinants, vector spaces, transformations",
       "MTH 231 – Discrete Math: Logic, sets, proofs by induction, relations, counting",
