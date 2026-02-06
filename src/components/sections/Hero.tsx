@@ -274,7 +274,7 @@ export function Hero() {
 
           <MagneticButton strength={0.2}>
             <a
-              href={personalInfo.resumeUrl}
+              href={`${process.env.NODE_ENV === "production" ? "/portfolio" : ""}${personalInfo.resumeUrl}`}
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
