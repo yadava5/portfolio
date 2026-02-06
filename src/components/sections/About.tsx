@@ -7,10 +7,17 @@
 
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GraduationCap, Award, MapPin, Calendar, BookOpen } from "lucide-react";
+import {
+  GraduationCap,
+  Award,
+  MapPin,
+  Calendar,
+  BookOpen,
+  ChevronDown,
+} from "lucide-react";
 
 import { GlassCard } from "@/components/ui/GlassCard";
 import { HoloCard } from "@/components/ui/HoloCard";
@@ -33,6 +40,7 @@ if (typeof window !== "undefined") {
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const [expandedCourse, setExpandedCourse] = useState<number | null>(null);
 
   // Animate stats counter on scroll
   useEffect(() => {
@@ -180,79 +188,151 @@ export function About() {
           >
             <HoloCard className="h-full">
               <div className="p-6 md:p-8">
-                <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/20">
-                    <GraduationCap className="h-5 w-5 text-fuchsia-400" />
+                {/* Header row with school info inline */}
+                <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-fuchsia-500/20">
+                      <GraduationCap className="h-5 w-5 text-fuchsia-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-white">
+                        {currentEducation?.school}
+                      </h3>
+                      <p className="text-sm text-violet-400">
+                        {currentEducation?.degree} in {currentEducation?.field}
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">
-                    Education
-                  </h3>
+                  {currentEducation && (
+                    <div className="flex items-center gap-2 text-sm text-white/50">
+                      <Calendar className="h-3.5 w-3.5" />
+                      <span>
+                        {formatDate(currentEducation.startDate)} —{" "}
+                        {formatDate(currentEducation.endDate)}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
+                {/* Coursework - grouped by category */}
                 {currentEducation && (
-                  <div className="space-y-6">
-                    {/* School info */}
-                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                      <div>
-                        <h4 className="text-xl font-semibold text-white">
-                          {currentEducation.school}
-                        </h4>
-                        <p className="mt-1 text-violet-400">
-                          {currentEducation.degree} in {currentEducation.field}
-                        </p>
-                        <div className="mt-2 flex items-center gap-2 text-sm text-white/60">
-                          <Calendar className="h-4 w-4" />
-                          <span>
-                            {formatDate(currentEducation.startDate)} —{" "}
-                            {formatDate(currentEducation.endDate)}
-                          </span>
-                        </div>
-                      </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-white/40 uppercase">
+                      <BookOpen className="h-3.5 w-3.5" />
+                      <span>Key Coursework</span>
                     </div>
 
-                    {/* Relevant coursework - enhanced grid */}
-                    <div>
-                      <div className="mb-4 flex items-center gap-2 text-sm font-medium text-white/80">
-                        <BookOpen className="h-4 w-4 text-violet-400" />
-                        <span>Key Coursework</span>
-                      </div>
-                      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        {currentEducation.coursework.map((course, index) => {
-                          const [code, ...rest] = course.split(" – ");
-                          const description = rest.join(" – ");
-                          const hasCode = description.length > 0;
-                          const colors = [
-                            "from-violet-500/20 to-purple-500/10 border-violet-500/30",
-                            "from-fuchsia-500/20 to-pink-500/10 border-fuchsia-500/30",
-                            "from-cyan-500/20 to-blue-500/10 border-cyan-500/30",
-                            "from-emerald-500/20 to-teal-500/10 border-emerald-500/30",
-                            "from-amber-500/20 to-orange-500/10 border-amber-500/30",
-                            "from-rose-500/20 to-red-500/10 border-rose-500/30",
-                          ];
-                          return (
+                    {(() => {
+                      const groups: {
+                        label: string;
+                        color: string;
+                        badgeColor: string;
+                        courses: {
+                          code: string;
+                          name: string;
+                          desc: string;
+                          idx: number;
+                        }[];
+                      }[] = [
+                        {
+                          label: "Computer Science",
+                          color: "border-violet-500/20",
+                          badgeColor: "bg-violet-500/20 text-violet-300",
+                          courses: [],
+                        },
+                        {
+                          label: "Mathematics",
+                          color: "border-cyan-500/20",
+                          badgeColor: "bg-cyan-500/20 text-cyan-300",
+                          courses: [],
+                        },
+                        {
+                          label: "Statistics",
+                          color: "border-amber-500/20",
+                          badgeColor: "bg-amber-500/20 text-amber-300",
+                          courses: [],
+                        },
+                      ];
+
+                      currentEducation.coursework.forEach((c, i) => {
+                        const [code, ...rest] = c.split(" – ");
+                        const fullDesc = rest.join(" – ");
+                        const colonIdx = fullDesc.indexOf(":");
+                        const name =
+                          colonIdx > -1
+                            ? fullDesc.slice(0, colonIdx)
+                            : fullDesc;
+                        const desc =
+                          colonIdx > -1 ? fullDesc.slice(colonIdx + 2) : "";
+                        const prefix = code.split(" ")[0];
+                        const groupIdx =
+                          prefix === "CSE" ? 0 : prefix === "MTH" ? 1 : 2;
+                        groups[groupIdx].courses.push({
+                          code,
+                          name,
+                          desc,
+                          idx: i,
+                        });
+                      });
+
+                      return (
+                        <div className="grid gap-3 md:grid-cols-3">
+                          {groups.map((group) => (
                             <div
-                              key={index}
-                              className={`group relative overflow-hidden rounded-xl border bg-gradient-to-br p-3 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${colors[index % colors.length]}`}
+                              key={group.label}
+                              className={`rounded-xl border ${group.color} bg-white/[0.02] p-3`}
                             >
-                              {hasCode ? (
-                                <>
-                                  <p className="font-mono text-xs font-semibold text-white/90">
-                                    {code}
-                                  </p>
-                                  <p className="mt-1 text-xs leading-relaxed text-white/60">
-                                    {description}
-                                  </p>
-                                </>
-                              ) : (
-                                <p className="text-sm text-white/80">
-                                  {course}
-                                </p>
-                              )}
+                              <span
+                                className={`mb-2.5 inline-block rounded-md px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase ${group.badgeColor}`}
+                              >
+                                {group.label}
+                              </span>
+                              <div className="space-y-1">
+                                {group.courses.map((course) => (
+                                  <button
+                                    key={course.idx}
+                                    onClick={() =>
+                                      setExpandedCourse(
+                                        expandedCourse === course.idx
+                                          ? null
+                                          : course.idx
+                                      )
+                                    }
+                                    className="group w-full text-left"
+                                  >
+                                    <div className="flex items-center justify-between rounded-lg px-2 py-1.5 transition-colors hover:bg-white/5">
+                                      <div className="flex min-w-0 items-center gap-2">
+                                        <span className="shrink-0 font-mono text-[11px] font-semibold text-white/70">
+                                          {course.code}
+                                        </span>
+                                        <span className="truncate text-xs text-white/50">
+                                          {course.name}
+                                        </span>
+                                      </div>
+                                      {course.desc && (
+                                        <ChevronDown
+                                          className={`h-3 w-3 shrink-0 text-white/30 transition-transform duration-200 ${
+                                            expandedCourse === course.idx
+                                              ? "rotate-180"
+                                              : ""
+                                          }`}
+                                        />
+                                      )}
+                                    </div>
+                                    {expandedCourse === course.idx &&
+                                      course.desc && (
+                                        <p className="mt-0.5 px-2 pb-1 text-[11px] leading-relaxed text-white/40">
+                                          {course.desc}
+                                        </p>
+                                      )}
+                                  </button>
+                                ))}
+                              </div>
                             </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+                          ))}
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
               </div>
