@@ -32,6 +32,10 @@ interface HoloCardProps {
   enableShine?: boolean;
   /** Animation speed in seconds */
   animationSpeed?: number;
+  /** Whether to show hover effects */
+  hoverable?: boolean;
+  /** Click handler */
+  onClick?: () => void;
 }
 
 /* ──────────────────────────────────────────────
@@ -67,6 +71,8 @@ export function HoloCard({
   contentClassName,
   enableShine = false,
   animationSpeed = 3,
+  hoverable = false,
+  onClick,
 }: HoloCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
@@ -87,10 +93,15 @@ export function HoloCard({
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
+      onClick={onClick}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => e.key === "Enter" && onClick() : undefined}
       className={cn(
         "holo-card group relative rounded-2xl p-[2px]",
         "transition-transform duration-[var(--transition-base)]",
-        "hover:scale-[1.02]",
+        hoverable && "cursor-pointer hover:scale-[1.02]",
+        !hoverable && "hover:scale-[1.02]",
         className
       )}
       style={
