@@ -188,8 +188,16 @@ function ContactForm() {
     }
 
     try {
-      // Simulate form submission (replace with actual API call)
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Create mailto link with form data
+      const subject = encodeURIComponent(
+        formData.subject || "Contact from Portfolio"
+      );
+      const body = encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      );
+
+      // Open email client
+      window.location.href = `mailto:${personalInfo.email}?subject=${subject}&body=${body}`;
 
       // Success
       setIsSubmitted(true);
@@ -217,9 +225,9 @@ function ContactForm() {
         <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
           <CheckCircle2 className="h-10 w-10 text-emerald-400" />
         </div>
-        <h3 className="mb-2 text-2xl font-bold text-white">Message Sent!</h3>
+        <h3 className="mb-2 text-2xl font-bold text-white">Email Ready!</h3>
         <p className="text-white/60">
-          Thank you for reaching out. I&apos;ll get back to you soon.
+          Your email client should have opened. Send the email to reach me!
         </p>
       </GlassCard>
     );
