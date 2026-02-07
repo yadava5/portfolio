@@ -223,7 +223,7 @@ function StatBar({
           )}
         </span>
       </div>
-      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-white/6">
         <div
           ref={barRef}
           className="absolute inset-y-0 left-0 rounded-full"
@@ -237,7 +237,7 @@ function StatBar({
         {[...Array(maxValue)].map((_, i) => (
           <div
             key={i}
-            className="absolute top-0 h-full w-px bg-white/[0.06]"
+            className="absolute top-0 h-full w-px bg-white/6"
             style={{ left: `${((i + 1) / maxValue) * 100}%` }}
           />
         ))}
@@ -392,7 +392,7 @@ function PulseWave() {
       </svg>
 
       {/* Glow at bottom */}
-      <div className="absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-violet-500/[0.04] to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-violet-500/4 to-transparent" />
     </div>
   );
 }
