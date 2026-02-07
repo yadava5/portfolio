@@ -4,7 +4,6 @@
  * Features:
  * - Transparent → frosted glass on scroll (via IntersectionObserver)
  * - Smooth anchor-link navigation to page sections
- * - Theme toggle button (dark ↔ light)
  * - Mobile hamburger menu with slide-in drawer
  * - Hides on scroll-down, reveals on scroll-up
  * - Holographic accent underline on active section
@@ -14,7 +13,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { useTheme } from "./ThemeProvider";
 
 /* ──────────────────────────────────────────────
    Navigation items
@@ -97,50 +95,6 @@ function useHasScrolled(): boolean {
 }
 
 /* ──────────────────────────────────────────────
-   Theme toggle icon (sun / moon)
-   ────────────────────────────────────────────── */
-
-/**
- * Animated sun/moon icon for the theme toggle button
- *
- * @param props.isDark - Whether the current theme is dark
- */
-function ThemeIcon({ isDark }: { isDark: boolean }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-5 w-5 transition-transform duration-300"
-      style={{ transform: isDark ? "rotate(0deg)" : "rotate(180deg)" }}
-      aria-hidden="true"
-    >
-      {isDark ? (
-        /* Moon icon */
-        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z" />
-      ) : (
-        /* Sun icon */
-        <>
-          <circle cx="12" cy="12" r="5" />
-          <line x1="12" y1="1" x2="12" y2="3" />
-          <line x1="12" y1="21" x2="12" y2="23" />
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-          <line x1="1" y1="12" x2="3" y2="12" />
-          <line x1="21" y1="12" x2="23" y2="12" />
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-        </>
-      )}
-    </svg>
-  );
-}
-
-/* ──────────────────────────────────────────────
    Mobile menu toggle icon
    ────────────────────────────────────────────── */
 
@@ -188,7 +142,6 @@ function MenuIcon({ open }: { open: boolean }) {
  * @returns The rendered header element
  */
 export default function Header() {
-  const { theme, toggleTheme } = useTheme();
   const visible = useScrollDirection();
   const scrolled = useHasScrolled();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -275,19 +228,6 @@ export default function Header() {
 
         {/* ── Right side actions ── */}
         <div className="flex items-center gap-2">
-          {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            className={cn(
-              "text-foreground-muted rounded-lg p-2 transition-colors duration-[var(--transition-fast)]",
-              "hover:text-foreground hover:bg-[var(--glass-background)]",
-              "focus-visible:outline-accent-primary focus-visible:outline-2 focus-visible:outline-offset-2"
-            )}
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-          >
-            <ThemeIcon isDark={theme === "dark"} />
-          </button>
-
           {/* Mobile menu button */}
           <button
             onClick={() => setMobileOpen((prev) => !prev)}

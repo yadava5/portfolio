@@ -3,7 +3,7 @@
  *
  * Wraps every page with:
  *   1. Geist font variables (sans + mono)
- *   2. ThemeProvider  — dark/light mode context
+ *   2. ThemeProvider  — dark mode wrapper
  *   3. SmoothScroll   — Lenis smooth scrolling
  *   4. Header         — floating glass navigation
  *   5. Footer         — social links + quick nav
