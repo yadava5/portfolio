@@ -246,6 +246,63 @@ function StatBar({
   );
 }
 
+/* deterministic intensity for the activity heatmap */
+function cellIntensity(seed: number): number {
+  const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+const GRID_WEEKS = 16;
+const GRID_DAYS = 7;
+const ACTIVITY_CELLS = Array.from(
+  { length: GRID_WEEKS * GRID_DAYS },
+  (_, i) => {
+    const v = cellIntensity(i + 1);
+    // ~25% empty, rest various intensities
+    if (v < 0.25) return 0;
+    if (v < 0.5) return 1;
+    if (v < 0.75) return 2;
+    return 3;
+  }
+);
+
+const INTENSITY_COLORS = [
+  "bg-white/[0.03]",
+  "bg-violet-500/20",
+  "bg-violet-500/40",
+  "bg-violet-400/60",
+];
+
+/** GitHub-style activity heatmap graphic */
+function ActivityGrid() {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div
+        className="grid gap-[3px]"
+        style={{
+          gridTemplateColumns: `repeat(${GRID_WEEKS}, 1fr)`,
+          gridTemplateRows: `repeat(${GRID_DAYS}, 1fr)`,
+          gridAutoFlow: "column",
+        }}
+      >
+        {ACTIVITY_CELLS.map((level, i) => (
+          <div
+            key={i}
+            className={`aspect-square rounded-[3px] transition-colors duration-300 ${INTENSITY_COLORS[level]}`}
+          />
+        ))}
+      </div>
+      <div className="flex items-center justify-end gap-1">
+        <span className="mr-1 text-[9px] text-white/25">Less</span>
+        {INTENSITY_COLORS.map((cls, i) => (
+          <div key={i} className={`h-2 w-2 rounded-[2px] ${cls}`} />
+        ))}
+        <span className="ml-1 text-[9px] text-white/25">More</span>
+      </div>
+    </div>
+  );
+}
+
 /** Coursework grid with expandable descriptions */
 function CourseworkGrid({
   coursework,
@@ -510,21 +567,31 @@ export function About() {
                 className="h-full"
                 borderClassName="from-cyan-500/30 via-violet-500/30 to-pink-500/30"
               >
-                <div className="flex h-full flex-col justify-center gap-8 p-6 py-10">
-                  <StatBar
-                    value={8}
-                    maxValue={10}
-                    label="Projects Built"
-                    gradientFrom="#8b5cf6"
-                    gradientTo="#c084fc"
-                  />
-                  <StatBar
-                    value={5}
-                    maxValue={8}
-                    label="Years Learning"
-                    gradientFrom="#f472b6"
-                    gradientTo="#fb7185"
-                  />
+                <div className="flex h-full flex-col justify-between p-6 py-8">
+                  <div className="space-y-8">
+                    <StatBar
+                      value={8}
+                      maxValue={10}
+                      label="Projects Built"
+                      gradientFrom="#8b5cf6"
+                      gradientTo="#c084fc"
+                    />
+                    <StatBar
+                      value={5}
+                      maxValue={8}
+                      label="Years Learning"
+                      gradientFrom="#f472b6"
+                      gradientTo="#fb7185"
+                    />
+                  </div>
+
+                  {/* Activity heatmap graphic */}
+                  <div className="mt-6">
+                    <p className="mb-3 text-[10px] font-medium tracking-widest text-white/30 uppercase">
+                      Activity
+                    </p>
+                    <ActivityGrid />
+                  </div>
                 </div>
               </GradientBorderCard>
             </TiltCard>
