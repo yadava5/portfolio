@@ -92,7 +92,7 @@ function ContactInfo() {
       <div className="mb-8 space-y-4">
         {infoItems.map((item) => (
           <div key={item.label} className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 text-violet-400">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-violet-500/20 to-fuchsia-500/20 text-violet-400">
               {item.icon}
             </div>
             <div>
@@ -127,7 +127,7 @@ function ContactInfo() {
               className={cn(
                 "group flex h-12 w-12 items-center justify-center rounded-xl",
                 "bg-white/5 text-white/60 transition-all duration-300",
-                "hover:bg-gradient-to-br hover:from-violet-500 hover:to-fuchsia-500",
+                "hover:bg-linear-to-br hover:from-violet-500 hover:to-fuchsia-500",
                 "hover:text-white hover:shadow-lg hover:shadow-violet-500/30"
               )}
               aria-label={link.name}
@@ -214,7 +214,7 @@ function ContactForm() {
   if (isSubmitted) {
     return (
       <GlassCard className="flex h-full flex-col items-center justify-center p-8 text-center">
-        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500/20 to-teal-500/20">
+        <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br from-emerald-500/20 to-teal-500/20">
           <CheckCircle2 className="h-10 w-10 text-emerald-400" />
         </div>
         <h3 className="mb-2 text-2xl font-bold text-white">Email Ready!</h3>
@@ -311,7 +311,7 @@ function ContactForm() {
             disabled={isSubmitting}
             className={cn(
               "group flex w-full items-center justify-center gap-2 rounded-xl py-4",
-              "bg-gradient-to-r from-violet-600 to-fuchsia-600",
+              "bg-linear-to-r from-violet-600 to-fuchsia-600",
               "font-semibold text-white",
               "transition-all duration-300",
               "hover:shadow-lg hover:shadow-violet-500/30",
@@ -352,7 +352,7 @@ export function Contact() {
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* Gradient orbs */}
         <div
-          className="absolute top-1/4 -right-32 h-[500px] w-[500px] rounded-full opacity-20"
+          className="absolute top-1/4 -right-32 h-125 w-125 rounded-full opacity-20"
           style={{
             background:
               "radial-gradient(circle, rgba(139,92,246,0.5) 0%, transparent 70%)",
@@ -361,7 +361,7 @@ export function Contact() {
           }}
         />
         <div
-          className="absolute bottom-1/4 -left-32 h-[500px] w-[500px] rounded-full opacity-20"
+          className="absolute bottom-1/4 -left-32 h-125 w-125 rounded-full opacity-20"
           style={{
             background:
               "radial-gradient(circle, rgba(236,72,153,0.5) 0%, transparent 70%)",
@@ -387,7 +387,7 @@ export function Contact() {
         {/* Section header */}
         <ScrollReveal variant="slide-up" className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-bold md:text-5xl">
-            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
               Let&apos;s Connect
             </span>
           </h2>

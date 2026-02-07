@@ -100,9 +100,9 @@ function GradientBorderCard({
   return (
     <div className={`group relative ${className}`}>
       <div
-        className={`absolute -inset-px rounded-2xl bg-gradient-to-r ${borderClassName} opacity-50 blur-[1px] transition-opacity duration-500 group-hover:opacity-100`}
+        className={`absolute -inset-px rounded-2xl bg-linear-to-r ${borderClassName} opacity-50 blur-[1px] transition-opacity duration-500 group-hover:opacity-100`}
       />
-      <div className="relative rounded-2xl border border-white/[0.06] bg-[#0a0a1f]/80 backdrop-blur-xl">
+      <div className="relative rounded-2xl border border-white/6 bg-[#0a0a1f]/80 backdrop-blur-xl">
         {children}
       </div>
     </div>
@@ -215,7 +215,7 @@ function StatRing({
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="relative h-[88px] w-[88px]">
+      <div className="relative h-22 w-22">
         <svg
           className="h-full w-full -rotate-90"
           viewBox="0 0 84 84"
@@ -321,7 +321,7 @@ function CourseworkGrid({
       {groups.map((group) => (
         <div
           key={group.label}
-          className={`rounded-xl border ${group.borderColor} bg-white/[0.015] p-3 transition-colors duration-300 hover:bg-white/[0.03]`}
+          className={`rounded-xl border ${group.borderColor} bg-white/1.5 p-3 transition-colors duration-300 hover:bg-white/3`}
         >
           <span
             className={`mb-2.5 inline-block rounded-md px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase ${group.badgeBg} ${group.badgeText}`}
@@ -339,7 +339,7 @@ function CourseworkGrid({
                 }
                 className="group/course w-full text-left"
               >
-                <div className="flex items-center justify-between rounded-lg px-2 py-1.5 transition-colors hover:bg-white/[0.04]">
+                <div className="flex items-center justify-between rounded-lg px-2 py-1.5 transition-colors hover:bg-white/4">
                   <div className="flex min-w-0 items-center gap-2">
                     <span className="shrink-0 font-mono text-[11px] font-semibold text-white/65">
                       {course.code}
@@ -426,7 +426,7 @@ export function About() {
         <ScrollReveal variant="slide-up" className="mb-16 text-center">
           <h2 className="mb-4 text-4xl font-bold md:text-5xl">
             About{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
               Me
             </span>
           </h2>
@@ -538,7 +538,7 @@ export function About() {
                     gradientTo="#c084fc"
                   />
                   <div className="flex w-full items-center">
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                    <div className="h-px flex-1 bg-linear-to-r from-transparent via-white/10 to-transparent" />
                   </div>
                   <div className="flex items-center gap-8">
                     <div className="text-center">

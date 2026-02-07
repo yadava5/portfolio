@@ -44,32 +44,32 @@ interface GlassCardProps<T extends ElementType = "div"> {
 /** Base styles shared by all variants */
 const baseStyles = cn(
   "relative rounded-2xl",
-  "border border-[var(--glass-border)]",
-  "transition-all duration-[var(--transition-base)] ease-[var(--easing-smooth)]"
+  "border border-(--glass-border)",
+  "transition-all duration-(--transition-base) ease-(--easing-smooth)"
 );
 
 /** Variant-specific styles */
 const variantStyles: Record<GlassVariant, string> = {
   default: cn(
-    "bg-[var(--glass-background)]",
+    "bg-(--glass-background)",
     "backdrop-blur-xl",
-    "shadow-lg shadow-[var(--glass-shadow)]"
+    "shadow-lg shadow-(--glass-shadow)"
   ),
   subtle: cn(
-    "bg-[var(--glass-background)]/50",
+    "bg-(--glass-background)/50",
     "backdrop-blur-md",
-    "shadow-md shadow-[var(--glass-shadow)]/50"
+    "shadow-md shadow-(--glass-shadow)/50"
   ),
   strong: cn(
-    "bg-[var(--glass-background)]",
+    "bg-(--glass-background)",
     "backdrop-blur-2xl",
-    "shadow-xl shadow-[var(--glass-shadow)]",
-    "border-[var(--glass-border)]/20"
+    "shadow-xl shadow-(--glass-shadow)",
+    "border-(--glass-border)/20"
   ),
   colored: cn(
-    "bg-gradient-to-br from-[var(--accent-primary)]/10 to-[var(--accent-secondary)]/10",
+    "bg-linear-to-br from-(--accent-primary)/10 to-(--accent-secondary)/10",
     "backdrop-blur-xl",
-    "shadow-lg shadow-[var(--glass-shadow)]"
+    "shadow-lg shadow-(--glass-shadow)"
   ),
 };
 
@@ -77,7 +77,7 @@ const variantStyles: Record<GlassVariant, string> = {
 const hoverStyles = cn(
   "hover:-translate-y-1",
   "hover:shadow-xl",
-  "hover:border-[var(--accent-primary)]/30"
+  "hover:border-(--accent-primary)/30"
 );
 
 /* ──────────────────────────────────────────────

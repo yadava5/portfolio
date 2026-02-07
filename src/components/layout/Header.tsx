@@ -121,7 +121,7 @@ function MenuIcon({ open }: { open: boolean }) {
       <span
         className={cn(
           "bg-foreground absolute left-0 block h-0.5 w-full rounded-full transition-all duration-300",
-          open ? "top-2.5 -rotate-45" : "top-[18px]"
+          open ? "top-2.5 -rotate-45" : "top-4.5"
         )}
       />
     </div>
@@ -175,12 +175,12 @@ export default function Header() {
         "fixed top-0 right-0 left-0 z-50 transition-all duration-500",
         visible ? "translate-y-0" : "-translate-y-full",
         scrolled
-          ? "border-b border-[var(--glass-border)] bg-[var(--glass-background)] shadow-[var(--glass-shadow)] shadow-lg backdrop-blur-xl"
+          ? "border-b border-(--glass-border) bg-(--glass-background) shadow-(--glass-shadow) shadow-lg backdrop-blur-xl"
           : "bg-transparent"
       )}
     >
       <nav
-        className="mx-auto flex max-w-[var(--container-max)] items-center justify-between px-6 py-4"
+        className="mx-auto flex max-w-(--container-max) items-center justify-between px-6 py-4"
         aria-label="Primary navigation"
       >
         {/* ── Logo / Name ── */}
@@ -194,7 +194,7 @@ export default function Header() {
         >
           <span className="relative z-10">AY</span>
           <span
-            className="absolute -inset-x-2 -inset-y-1 -z-0 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            className="absolute -inset-x-2 -inset-y-1 z-0 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             style={{ background: "var(--holo-gradient)", filter: "blur(8px)" }}
             aria-hidden="true"
           />
@@ -209,7 +209,7 @@ export default function Header() {
                 onClick={(e) => handleNavClick(e, item.href)}
                 className={cn(
                   "text-foreground-muted relative rounded-lg px-3 py-2 text-sm font-medium",
-                  "transition-colors duration-[var(--transition-fast)]",
+                  "transition-colors duration-(--transition-fast)",
                   "hover:text-foreground",
                   "focus-visible:outline-accent-primary focus-visible:outline-2 focus-visible:outline-offset-2"
                 )}
@@ -232,8 +232,8 @@ export default function Header() {
           <button
             onClick={() => setMobileOpen((prev) => !prev)}
             className={cn(
-              "text-foreground-muted rounded-lg p-2 transition-colors duration-[var(--transition-fast)] md:hidden",
-              "hover:text-foreground hover:bg-[var(--glass-background)]",
+              "text-foreground-muted rounded-lg p-2 transition-colors duration-(--transition-fast) md:hidden",
+              "hover:text-foreground hover:bg-(--glass-background)",
               "focus-visible:outline-accent-primary focus-visible:outline-2 focus-visible:outline-offset-2"
             )}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -247,7 +247,7 @@ export default function Header() {
       {/* ── Mobile drawer ── */}
       <div
         className={cn(
-          "overflow-hidden border-t border-[var(--glass-border)] bg-[var(--glass-background)] backdrop-blur-xl transition-all duration-500 md:hidden",
+          "overflow-hidden border-t border-(--glass-border) bg-(--glass-background) backdrop-blur-xl transition-all duration-500 md:hidden",
           mobileOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         )}
         aria-hidden={!mobileOpen}
@@ -261,8 +261,8 @@ export default function Header() {
                 tabIndex={mobileOpen ? 0 : -1}
                 className={cn(
                   "text-foreground-muted block rounded-lg px-3 py-2.5 text-sm font-medium",
-                  "transition-colors duration-[var(--transition-fast)]",
-                  "hover:text-foreground hover:bg-[var(--glass-background)]"
+                  "transition-colors duration-(--transition-fast)",
+                  "hover:text-foreground hover:bg-(--glass-background)"
                 )}
               >
                 {item.label}

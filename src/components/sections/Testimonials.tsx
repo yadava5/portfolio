@@ -104,10 +104,10 @@ function TestimonialCard({ testimonial, isActive }: TestimonialCardProps) {
         </div>
 
         {/* Relationship badge */}
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r px-3 py-1.5 text-xs font-medium">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r px-3 py-1.5 text-xs font-medium">
           <span
             className={cn(
-              "flex items-center gap-1.5 rounded-full bg-gradient-to-r px-3 py-1",
+              "flex items-center gap-1.5 rounded-full bg-linear-to-r px-3 py-1",
               relationshipConfig.color
             )}
           >
@@ -127,7 +127,7 @@ function TestimonialCard({ testimonial, isActive }: TestimonialCardProps) {
         <div className="relative z-20 flex items-center justify-between">
           <div className="flex items-center gap-4">
             {/* Avatar placeholder */}
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-violet-500/20 to-fuchsia-500/20">
               <User className="h-7 w-7 text-violet-400" />
             </div>
             <div>
@@ -196,7 +196,7 @@ export function Testimonials() {
       {/* Background decorations */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
-          className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10"
+          className="absolute top-1/2 left-1/2 h-150 w-150 -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10"
           style={{
             background:
               "radial-gradient(circle, rgba(139,92,246,0.4) 0%, transparent 70%)",
@@ -209,7 +209,7 @@ export function Testimonials() {
         {/* Section header */}
         <ScrollReveal variant="slide-up" className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-bold md:text-5xl">
-            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
               What People Say
             </span>
           </h2>
@@ -255,7 +255,7 @@ export function Testimonials() {
                       className={cn(
                         "h-2 rounded-full transition-all duration-300",
                         index === activeIndex
-                          ? "w-8 bg-gradient-to-r from-violet-500 to-fuchsia-500"
+                          ? "w-8 bg-linear-to-r from-violet-500 to-fuchsia-500"
                           : "w-2 bg-white/20 hover:bg-white/40"
                       )}
                       aria-label={`Go to testimonial ${index + 1}`}

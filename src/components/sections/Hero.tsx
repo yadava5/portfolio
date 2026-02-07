@@ -203,7 +203,7 @@ export function Hero() {
         className="relative z-10 max-w-4xl text-center will-change-transform"
       >
         {/* Availability badge */}
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--glass-border)] bg-[var(--glass-background)] px-4 py-2 backdrop-blur-sm">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-(--glass-border) bg-(--glass-background) px-4 py-2 backdrop-blur-sm">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
@@ -258,8 +258,8 @@ export function Hero() {
               href="#projects"
               className={cn(
                 "block rounded-full px-8 py-3 text-sm font-semibold text-white",
-                "bg-[var(--accent-primary)]",
-                "transition-all duration-[var(--transition-base)]",
+                "bg-accent-primary",
+                "transition-all duration-(--transition-base)",
                 "hover:shadow-lg hover:shadow-violet-500/30"
               )}
             >
@@ -271,8 +271,8 @@ export function Hero() {
             <a
               href="#contact"
               className={cn(
-                "text-foreground block rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
-                "transition-all duration-[var(--transition-base)]",
+                "text-foreground block rounded-full border border-(--glass-border) px-8 py-3 text-sm font-semibold",
+                "transition-all duration-(--transition-base)",
                 "hover:border-violet-500 hover:text-violet-400"
               )}
             >
@@ -286,8 +286,8 @@ export function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
-                "text-foreground block rounded-full border border-[var(--glass-border)] px-8 py-3 text-sm font-semibold",
-                "transition-all duration-[var(--transition-base)]",
+                "text-foreground block rounded-full border border-(--glass-border) px-8 py-3 text-sm font-semibold",
+                "transition-all duration-(--transition-base)",
                 "hover:border-fuchsia-500 hover:text-fuchsia-400"
               )}
             >
@@ -306,9 +306,9 @@ export function Hero() {
               rel={social.name !== "Email" ? "noopener noreferrer" : undefined}
               className={cn(
                 "flex h-12 w-12 items-center justify-center rounded-full",
-                "border border-[var(--glass-border)] bg-[var(--glass-background)]",
+                "border border-(--glass-border) bg-(--glass-background)",
                 "text-foreground-muted backdrop-blur-sm",
-                "transition-all duration-[var(--transition-base)]",
+                "transition-all duration-(--transition-base)",
                 "hover:border-accent-primary hover:text-accent-primary",
                 "hover:shadow-accent-primary/20 hover:shadow-lg"
               )}

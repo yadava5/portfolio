@@ -57,7 +57,7 @@ function ExperienceCard({ experience, index, isLast }: ExperienceCardProps) {
       <div
         className={cn(
           "absolute top-0 left-0 h-full w-px",
-          "bg-gradient-to-b from-violet-500/50 via-purple-500/30 to-transparent",
+          "bg-linear-to-b from-violet-500/50 via-purple-500/30 to-transparent",
           isLast && "h-8"
         )}
       />
@@ -258,7 +258,7 @@ export function Experience() {
         <ScrollReveal variant="slide-up" className="mb-16 text-center">
           <h2 className="mb-4 text-4xl font-bold md:text-5xl">
             Work{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
               Experience
             </span>
           </h2>
@@ -275,7 +275,7 @@ export function Experience() {
             className="absolute top-0 left-0 w-px overflow-hidden md:left-4"
             style={{ height: 0 }}
           >
-            <div className="h-full w-full bg-gradient-to-b from-violet-500 via-purple-500 to-fuchsia-500 shadow-[0_0_20px_rgba(139,92,246,0.5)]" />
+            <div className="h-full w-full bg-linear-to-b from-violet-500 via-purple-500 to-fuchsia-500 shadow-[0_0_20px_rgba(139,92,246,0.5)]" />
           </div>
 
           {/* Experience cards */}

@@ -95,7 +95,7 @@ function ProjectSpotlight({ project }: { project: Project }) {
       <GlassCard variant="strong" className="relative overflow-hidden">
         {/* Animated background pattern */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0f] via-[#0f0f18] to-[#0a0a0f]" />
+          <div className="absolute inset-0 bg-linear-to-br from-[#0a0a0f] via-[#0f0f18] to-[#0a0a0f]" />
 
           {/* Floating orbs */}
           <div
@@ -269,7 +269,7 @@ function ProjectListItem({
         "rounded-xl border p-4",
         isActive
           ? "border-white/10 bg-white/5"
-          : "border-transparent bg-transparent hover:border-white/5 hover:bg-white/[0.02]"
+          : "border-transparent bg-transparent hover:border-white/5 hover:bg-white/2"
       )}
     >
       {/* Active indicator */}
@@ -385,7 +385,7 @@ export function Projects() {
         <ScrollReveal variant="slide-up" className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-bold md:text-5xl">
             Featured{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-violet-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">
               Projects
             </span>
           </h2>
@@ -426,7 +426,7 @@ export function Projects() {
           <ScrollReveal variant="slide-left" delay={0.3}>
             <GlassCard
               variant="subtle"
-              className="flex max-h-[500px] flex-col p-4 lg:sticky lg:top-24"
+              className="flex max-h-125 flex-col p-4 lg:sticky lg:top-24"
             >
               <h3 className="mb-4 shrink-0 px-4 text-sm font-semibold tracking-wider text-white/50 uppercase">
                 All Projects ({sortedProjects.length})

@@ -98,8 +98,8 @@ export function HoloCard({
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={onClick ? (e) => e.key === "Enter" && onClick() : undefined}
       className={cn(
-        "holo-card group relative rounded-2xl p-[2px]",
-        "transition-transform duration-[var(--transition-base)]",
+        "holo-card group relative rounded-2xl p-0.5",
+        "transition-transform duration-(--transition-base)",
         hoverable && "cursor-pointer hover:scale-[1.02]",
         !hoverable && "hover:scale-[1.02]",
         className
@@ -136,7 +136,7 @@ export function HoloCard({
       <div
         className={cn(
           "relative rounded-[14px]",
-          "bg-[var(--background)]",
+          "bg-background",
           "backdrop-blur-xl",
           contentClassName
         )}

@@ -52,12 +52,12 @@ export default function Footer() {
     <footer className="relative mt-24">
       {/* Holographic divider */}
       <div
-        className="mx-auto h-px w-3/4 max-w-[var(--container-max)]"
+        className="mx-auto h-px w-3/4 max-w-(--container-max)"
         style={{ background: "var(--holo-gradient)" }}
         aria-hidden="true"
       />
 
-      <div className="mx-auto max-w-[var(--container-max)] px-6 py-12">
+      <div className="mx-auto max-w-(--container-max) px-6 py-12">
         <div className="grid gap-10 md:grid-cols-3">
           {/* ── Column 1: Branding ── */}
           <div className="space-y-3">
@@ -80,7 +80,7 @@ export default function Footer() {
                   <a
                     href={link.href}
                     className={cn(
-                      "text-foreground-muted text-sm transition-colors duration-[var(--transition-fast)]",
+                      "text-foreground-muted text-sm transition-colors duration-(--transition-fast)",
                       "hover:text-foreground"
                     )}
                   >
@@ -107,8 +107,8 @@ export default function Footer() {
                   }
                   className={cn(
                     "flex h-10 w-10 items-center justify-center rounded-lg",
-                    "border border-[var(--glass-border)] bg-[var(--glass-background)]",
-                    "text-foreground-muted transition-all duration-[var(--transition-base)]",
+                    "border border-(--glass-border) bg-(--glass-background)",
+                    "text-foreground-muted transition-all duration-(--transition-base)",
                     "hover:border-accent-primary hover:text-accent-primary hover:shadow-accent-primary/20 hover:shadow-lg"
                   )}
                   aria-label={`Visit ${social.name}`}
@@ -129,7 +129,7 @@ export default function Footer() {
         </div>
 
         {/* ── Bottom bar ── */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[var(--glass-border)] pt-6 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-(--glass-border) pt-6 sm:flex-row">
           <p className="text-foreground-muted text-xs">
             &copy; {currentYear} {personalInfo.name}. All rights reserved.
           </p>
