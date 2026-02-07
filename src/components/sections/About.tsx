@@ -246,59 +246,153 @@ function StatBar({
   );
 }
 
-/* deterministic intensity for the activity heatmap */
-function cellIntensity(seed: number): number {
-  const x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
-  return x - Math.floor(x);
-}
-
-const GRID_WEEKS = 16;
-const GRID_DAYS = 7;
-const ACTIVITY_CELLS = Array.from(
-  { length: GRID_WEEKS * GRID_DAYS },
-  (_, i) => {
-    const v = cellIntensity(i + 1);
-    // ~25% empty, rest various intensities
-    if (v < 0.25) return 0;
-    if (v < 0.5) return 1;
-    if (v < 0.75) return 2;
-    return 3;
-  }
-);
-
-const INTENSITY_COLORS = [
-  "bg-white/[0.03]",
-  "bg-violet-500/20",
-  "bg-violet-500/40",
-  "bg-violet-400/60",
-];
-
-/** GitHub-style activity heatmap graphic */
-function ActivityGrid() {
+/** Animated SVG pulse waveform — decorative data visualization */
+function PulseWave() {
   return (
-    <div className="flex flex-col gap-1.5">
-      <div
-        className="grid gap-[3px]"
-        style={{
-          gridTemplateColumns: `repeat(${GRID_WEEKS}, 1fr)`,
-          gridTemplateRows: `repeat(${GRID_DAYS}, 1fr)`,
-          gridAutoFlow: "column",
-        }}
+    <div className="relative h-24 w-full overflow-hidden rounded-lg">
+      {/* Faint grid backdrop */}
+      <svg
+        className="absolute inset-0 h-full w-full"
+        preserveAspectRatio="none"
       >
-        {ACTIVITY_CELLS.map((level, i) => (
-          <div
-            key={i}
-            className={`aspect-square rounded-[3px] transition-colors duration-300 ${INTENSITY_COLORS[level]}`}
+        {[...Array(6)].map((_, i) => (
+          <line
+            key={`h${i}`}
+            x1="0"
+            y1={`${(i + 1) * (100 / 7)}%`}
+            x2="100%"
+            y2={`${(i + 1) * (100 / 7)}%`}
+            stroke="rgba(255,255,255,0.03)"
+            strokeWidth="1"
           />
         ))}
-      </div>
-      <div className="flex items-center justify-end gap-1">
-        <span className="mr-1 text-[9px] text-white/25">Less</span>
-        {INTENSITY_COLORS.map((cls, i) => (
-          <div key={i} className={`h-2 w-2 rounded-[2px] ${cls}`} />
+        {[...Array(8)].map((_, i) => (
+          <line
+            key={`v${i}`}
+            x1={`${(i + 1) * (100 / 9)}%`}
+            y1="0"
+            x2={`${(i + 1) * (100 / 9)}%`}
+            y2="100%"
+            stroke="rgba(255,255,255,0.03)"
+            strokeWidth="1"
+          />
         ))}
-        <span className="ml-1 text-[9px] text-white/25">More</span>
-      </div>
+      </svg>
+
+      {/* Animated wave lines */}
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 400 100"
+        preserveAspectRatio="none"
+        fill="none"
+      >
+        <defs>
+          <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
+            <stop offset="20%" stopColor="#8b5cf6" stopOpacity="0.6" />
+            <stop offset="80%" stopColor="#c084fc" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#c084fc" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="wave-grad-2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#f472b6" stopOpacity="0" />
+            <stop offset="20%" stopColor="#f472b6" stopOpacity="0.4" />
+            <stop offset="80%" stopColor="#fb7185" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#fb7185" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="wave-fill-1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+
+        {/* Fill area under primary wave */}
+        <path
+          d="M0,70 C30,55 60,30 100,40 C140,50 160,65 200,45 C240,25 270,35 300,50 C330,65 360,40 400,55 L400,100 L0,100 Z"
+          fill="url(#wave-fill-1)"
+        >
+          <animate
+            attributeName="d"
+            dur="6s"
+            repeatCount="indefinite"
+            values="
+              M0,70 C30,55 60,30 100,40 C140,50 160,65 200,45 C240,25 270,35 300,50 C330,65 360,40 400,55 L400,100 L0,100 Z;
+              M0,60 C30,45 60,50 100,35 C140,20 160,55 200,50 C240,45 270,25 300,40 C330,55 360,35 400,45 L400,100 L0,100 Z;
+              M0,70 C30,55 60,30 100,40 C140,50 160,65 200,45 C240,25 270,35 300,50 C330,65 360,40 400,55 L400,100 L0,100 Z
+            "
+          />
+        </path>
+
+        {/* Primary wave line */}
+        <path
+          d="M0,70 C30,55 60,30 100,40 C140,50 160,65 200,45 C240,25 270,35 300,50 C330,65 360,40 400,55"
+          stroke="url(#wave-grad-1)"
+          strokeWidth="2"
+          strokeLinecap="round"
+        >
+          <animate
+            attributeName="d"
+            dur="6s"
+            repeatCount="indefinite"
+            values="
+              M0,70 C30,55 60,30 100,40 C140,50 160,65 200,45 C240,25 270,35 300,50 C330,65 360,40 400,55;
+              M0,60 C30,45 60,50 100,35 C140,20 160,55 200,50 C240,45 270,25 300,40 C330,55 360,35 400,45;
+              M0,70 C30,55 60,30 100,40 C140,50 160,65 200,45 C240,25 270,35 300,50 C330,65 360,40 400,55
+            "
+          />
+        </path>
+
+        {/* Secondary (pink) wave line */}
+        <path
+          d="M0,55 C40,70 80,50 120,60 C160,70 200,40 240,55 C280,70 320,50 360,60 C380,65 400,55 400,55"
+          stroke="url(#wave-grad-2)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        >
+          <animate
+            attributeName="d"
+            dur="8s"
+            repeatCount="indefinite"
+            values="
+              M0,55 C40,70 80,50 120,60 C160,70 200,40 240,55 C280,70 320,50 360,60 C380,65 400,55;
+              M0,65 C40,50 80,60 120,45 C160,55 200,70 240,60 C280,45 320,65 360,50 C380,55 400,60;
+              M0,55 C40,70 80,50 120,60 C160,70 200,40 240,55 C280,70 320,50 360,60 C380,65 400,55
+            "
+          />
+        </path>
+
+        {/* Accent dots on wave intersections */}
+        <circle r="3" fill="#8b5cf6" opacity="0.7">
+          <animate
+            attributeName="cx"
+            dur="6s"
+            repeatCount="indefinite"
+            values="200;200;200"
+          />
+          <animate
+            attributeName="cy"
+            dur="6s"
+            repeatCount="indefinite"
+            values="45;50;45"
+          />
+        </circle>
+        <circle r="2" fill="#f472b6" opacity="0.5">
+          <animate
+            attributeName="cx"
+            dur="8s"
+            repeatCount="indefinite"
+            values="120;120;120"
+          />
+          <animate
+            attributeName="cy"
+            dur="8s"
+            repeatCount="indefinite"
+            values="60;45;60"
+          />
+        </circle>
+      </svg>
+
+      {/* Glow at bottom */}
+      <div className="absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-violet-500/[0.04] to-transparent" />
     </div>
   );
 }
@@ -585,12 +679,9 @@ export function About() {
                     />
                   </div>
 
-                  {/* Activity heatmap graphic */}
+                  {/* Decorative wave graphic */}
                   <div className="mt-6">
-                    <p className="mb-3 text-[10px] font-medium tracking-widest text-white/30 uppercase">
-                      Activity
-                    </p>
-                    <ActivityGrid />
+                    <PulseWave />
                   </div>
                 </div>
               </GradientBorderCard>
