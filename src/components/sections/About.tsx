@@ -147,32 +147,29 @@ function FloatingParticles() {
   );
 }
 
-/** Animated SVG ring stat with GSAP counter */
-function StatRing({
+/** Animated horizontal bar stat with GSAP counter */
+function StatBar({
   value,
-  suffix,
+  maxValue,
   label,
-  color,
   gradientFrom,
   gradientTo,
 }: {
   value: number;
-  suffix?: string;
+  maxValue: number;
   label: string;
-  color: string;
   gradientFrom: string;
   gradientTo: string;
 }) {
   const countRef = useRef<HTMLSpanElement>(null);
-  const circleRef = useRef<SVGCircleElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const triggered = useRef(false);
-  const circumference = 2 * Math.PI * 38;
-  const fill = Math.min(value / 10, 1);
+  const fill = Math.min(value / maxValue, 1);
 
   useEffect(() => {
-    if (!countRef.current || !circleRef.current || triggered.current) return;
+    if (!countRef.current || !barRef.current || triggered.current) return;
     const el = countRef.current;
-    const circle = circleRef.current;
+    const bar = barRef.current;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -194,14 +191,14 @@ function StatRing({
         }
       );
       gsap.fromTo(
-        circle,
-        { strokeDashoffset: circumference },
+        bar,
+        { width: "0%" },
         {
-          strokeDashoffset: circumference * (1 - fill),
+          width: `${fill * 100}%`,
           duration: 2,
           ease: "power2.out",
           scrollTrigger: {
-            trigger: circle,
+            trigger: bar,
             start: "top 85%",
             toggleActions: "play none none none",
           },
@@ -209,58 +206,42 @@ function StatRing({
       );
     });
     return () => ctx.revert();
-  }, [value, circumference, fill]);
-
-  const gid = `ring-${label.replace(/\s+/g, "-")}`;
+  }, [value, fill]);
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="relative h-22 w-22">
-        <svg
-          className="h-full w-full -rotate-90"
-          viewBox="0 0 84 84"
-          fill="none"
-        >
-          <defs>
-            <linearGradient id={gid} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor={gradientFrom} />
-              <stop offset="100%" stopColor={gradientTo} />
-            </linearGradient>
-          </defs>
-          <circle
-            cx="42"
-            cy="42"
-            r="38"
-            strokeWidth="3"
-            stroke="rgba(255,255,255,0.04)"
-          />
-          <circle
-            ref={circleRef}
-            cx="42"
-            cy="42"
-            r="38"
-            strokeWidth="3.5"
-            stroke={`url(#${gid})`}
-            strokeLinecap="round"
-            strokeDasharray={circumference}
-            strokeDashoffset={circumference}
-            style={{ filter: `drop-shadow(0 0 6px ${color})` }}
-          />
-        </svg>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-2xl font-bold text-white" ref={countRef}>
+    <div className="w-full space-y-2.5">
+      <div className="flex items-end justify-between">
+        <span className="text-xs font-medium tracking-wide text-white/50">
+          {label}
+        </span>
+        <span className="flex items-baseline gap-0.5">
+          <span ref={countRef} className="text-3xl font-bold text-white">
             0
           </span>
-          {suffix && (
-            <span className="ml-0.5 text-sm font-semibold text-white/70">
-              {suffix}
-            </span>
+          {value >= 5 && (
+            <span className="text-sm font-semibold text-white/50">+</span>
           )}
-        </div>
+        </span>
       </div>
-      <span className="text-center text-[11px] font-medium tracking-wide text-white/45">
-        {label}
-      </span>
+      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+        <div
+          ref={barRef}
+          className="absolute inset-y-0 left-0 rounded-full"
+          style={{
+            width: "0%",
+            background: `linear-gradient(90deg, ${gradientFrom}, ${gradientTo})`,
+            boxShadow: `0 0 12px ${gradientFrom}60, 0 0 4px ${gradientFrom}40`,
+          }}
+        />
+        {/* Gridline ticks */}
+        {[...Array(maxValue)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute top-0 h-full w-px bg-white/[0.06]"
+            style={{ left: `${((i + 1) / maxValue) * 100}%` }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -529,34 +510,21 @@ export function About() {
                 className="h-full"
                 borderClassName="from-cyan-500/30 via-violet-500/30 to-pink-500/30"
               >
-                <div className="flex h-full flex-col items-center justify-center gap-6 p-6 py-8">
-                  <StatRing
+                <div className="flex h-full flex-col justify-center gap-8 p-6 py-10">
+                  <StatBar
                     value={8}
+                    maxValue={10}
                     label="Projects Built"
-                    color="#8b5cf6"
                     gradientFrom="#8b5cf6"
                     gradientTo="#c084fc"
                   />
-                  <div className="flex w-full items-center">
-                    <div className="h-px flex-1 bg-linear-to-r from-transparent via-white/10 to-transparent" />
-                  </div>
-                  <div className="flex items-center gap-8">
-                    <StatRing
-                      value={10}
-                      label="Certifications"
-                      color="#e879f9"
-                      gradientFrom="#e879f9"
-                      gradientTo="#f0abfc"
-                    />
-                    <div className="h-10 w-px bg-white/10" />
-                    <StatRing
-                      value={5}
-                      label="Years Learning"
-                      color="#f472b6"
-                      gradientFrom="#f472b6"
-                      gradientTo="#fb7185"
-                    />
-                  </div>
+                  <StatBar
+                    value={5}
+                    maxValue={8}
+                    label="Years Learning"
+                    gradientFrom="#f472b6"
+                    gradientTo="#fb7185"
+                  />
                 </div>
               </GradientBorderCard>
             </TiltCard>
