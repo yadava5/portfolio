@@ -541,17 +541,16 @@ export function About() {
                     <div className="h-px flex-1 bg-linear-to-r from-transparent via-white/10 to-transparent" />
                   </div>
                   <div className="flex items-center gap-8">
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-fuchsia-400">
-                        1M+
-                      </div>
-                      <p className="mt-1 text-[11px] font-medium tracking-wide text-white/45">
-                        Data Rows
-                      </p>
-                    </div>
+                    <StatRing
+                      value={10}
+                      label="Certifications"
+                      color="#e879f9"
+                      gradientFrom="#e879f9"
+                      gradientTo="#f0abfc"
+                    />
                     <div className="h-10 w-px bg-white/10" />
                     <StatRing
-                      value={4}
+                      value={5}
                       label="Years Learning"
                       color="#f472b6"
                       gradientFrom="#f472b6"
