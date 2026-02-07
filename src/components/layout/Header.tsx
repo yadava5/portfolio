@@ -175,7 +175,7 @@ export default function Header() {
         "fixed top-0 right-0 left-0 z-50 transition-all duration-500",
         visible ? "translate-y-0" : "-translate-y-full",
         scrolled
-          ? "border-b border-(--glass-border) bg-(--glass-background) shadow-(--glass-shadow) shadow-lg backdrop-blur-xl"
+          ? "border-b border-(--glass-border) bg-(--glass-background) shadow-lg shadow-black/50 backdrop-blur-xl"
           : "bg-transparent"
       )}
     >
