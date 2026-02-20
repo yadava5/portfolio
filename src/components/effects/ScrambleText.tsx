@@ -154,7 +154,16 @@ export function ScrambleText({
       clearInterval(scrambleInterval);
       cleanup();
     };
-  }, [hasStarted, isAnimating, text, speed, scrambleDuration, prefersReducedMotion, onComplete, cleanup]);
+  }, [
+    hasStarted,
+    isAnimating,
+    text,
+    speed,
+    scrambleDuration,
+    prefersReducedMotion,
+    onComplete,
+    cleanup,
+  ]);
 
   // Show nothing until animation starts (for delay)
   if (!hasStarted && !prefersReducedMotion) {
@@ -174,7 +183,7 @@ export function ScrambleText({
           className={
             i < text.length && displayText[i] === text[i]
               ? "opacity-100"
-              : "opacity-70 text-violet-400"
+              : "text-violet-400 opacity-70"
           }
         >
           {char}
