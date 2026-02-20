@@ -418,12 +418,12 @@ export function Projects() {
         {/* Spotlight layout */}
         <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
           {/* Main spotlight */}
-          <ScrollReveal variant="slide-up" delay={0.2}>
+          <ScrollReveal variant="slide-up" delay={0.2} className="order-2 lg:order-1">
             {activeProject && <ProjectSpotlight project={activeProject} />}
           </ScrollReveal>
 
           {/* Project list sidebar */}
-          <ScrollReveal variant="slide-left" delay={0.3}>
+          <ScrollReveal variant="slide-left" delay={0.3} className="order-1 lg:order-2">
             <GlassCard
               variant="subtle"
               className="flex max-h-125 flex-col p-4 lg:sticky lg:top-24"
