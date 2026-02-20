@@ -38,13 +38,15 @@ export function cn(...inputs: ClassValue[]): string {
 /**
  * Formats a date string for display
  *
+ * Handles YYYY-MM format by using UTC to avoid timezone offset issues.
+ *
  * @param dateString - Date string in any parseable format
  * @param options - Intl.DateTimeFormat options
  * @returns Formatted date string
  *
  * @example
  * ```ts
- * formatDate("2025-06-01")
+ * formatDate("2025-06")
  * // => "Jun 2025"
  * ```
  */
@@ -52,7 +54,11 @@ export function formatDate(
   dateString: string,
   options: Intl.DateTimeFormatOptions = { month: "short", year: "numeric" }
 ): string {
-  return new Date(dateString).toLocaleDateString("en-US", options);
+  // For YYYY-MM format, append day to avoid timezone offset issues
+  const normalized = /^\d{4}-\d{2}$/.test(dateString)
+    ? dateString + "-15"
+    : dateString;
+  return new Date(normalized).toLocaleDateString("en-US", options);
 }
 
 /**

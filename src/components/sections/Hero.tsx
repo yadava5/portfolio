@@ -16,7 +16,7 @@
 import { cn } from "@/lib/utils";
 import { personalInfo, socialLinks } from "@/lib/data/personal";
 import { ParticlesBg } from "@/components/ui";
-import { MagneticButton } from "@/components/effects";
+import { MagneticButton, ScrambleText } from "@/components/effects";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
@@ -227,12 +227,17 @@ export function Hero() {
           </span>
         </h1>
 
-        {/* Tagline */}
+        {/* Tagline with scramble effect */}
         <p
           ref={taglineRef}
           className="text-accent-primary mb-4 text-lg font-medium tracking-wide md:text-xl"
         >
-          {personalInfo.tagline}
+          <ScrambleText
+            text={personalInfo.tagline}
+            delay={800}
+            speed={35}
+            scrambleDuration={600}
+          />
         </p>
 
         {/* Subtitle / short bio */}
