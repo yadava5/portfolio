@@ -227,33 +227,25 @@ export function Hero() {
           </span>
         </h1>
 
-        {/* Tagline with scramble effect */}
+        {/* Tagline */}
         <p
           ref={taglineRef}
           className="text-accent-primary mb-4 text-lg font-medium tracking-wide md:text-xl"
         >
-          <ScrambleText
-            text={personalInfo.tagline}
-            delay={800}
-            speed={35}
-            scrambleDuration={600}
-          />
+          {personalInfo.tagline}
         </p>
 
-        {/* Subtitle / short bio */}
+        {/* Subtitle / short bio with scramble effect */}
         <p
           ref={subtitleRef}
           className="text-foreground-muted mx-auto mb-8 max-w-2xl text-base md:text-lg"
         >
-          {personalInfo.bio[0].split(/\*\*(.*?)\*\*/g).map((part, i) =>
-            i % 2 === 1 ? (
-              <span key={i} className="font-medium text-white/90">
-                {part}
-              </span>
-            ) : (
-              <span key={i}>{part}</span>
-            )
-          )}
+          <ScrambleText
+            text={personalInfo.bio[0].replace(/\*\*/g, "")}
+            delay={800}
+            speed={80}
+            scrambleDuration={1200}
+          />
         </p>
 
         {/* CTA Buttons */}
