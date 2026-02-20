@@ -50,6 +50,37 @@ export interface Project {
  */
 export const projects: Project[] = [
   {
+    id: "jobtracker",
+    title: "JobTracker",
+    shortDescription:
+      "Native macOS app that syncs Gmail & iCloud, classifies emails with local ML, and tracks your job search pipeline.",
+    fullDescription:
+      "An email-powered job application tracker that syncs your Gmail and iCloud Mail, identifies job-related messages (rejections, interviews, offers) using a 3-layer hybrid ML classifier, and organizes them into a trackable pipeline with a beautiful Liquid Glass dashboard.",
+    techStack: [
+      { name: "Python", color: "#3776ab" },
+      { name: "FastAPI", color: "#009688" },
+      { name: "SwiftUI", color: "#0071e3" },
+      { name: "SQLite", color: "#003b57" },
+      { name: "SetFit", color: "#ff6f00" },
+      { name: "sentence-transformers", color: "#ff9800" },
+    ],
+    githubUrl: "https://github.com/yadava5/jobtracker",
+    liveUrl: null,
+    image: "/images/projects/jobtracker.png",
+    featured: true,
+    category: "ai-ml",
+    startDate: "2026-02",
+    endDate: "Present",
+    highlights: [
+      "Privacy-first: all ML processing happens locally on-device",
+      "3-layer hybrid classifier (rules → embeddings → SetFit)",
+      "Gmail OAuth2 & iCloud IMAP async integration",
+      "Native macOS 15+ Liquid Glass UI with SF Symbols 7",
+      "Real-time sync via SMAppService + launchd",
+    ],
+    isPrivate: false,
+  },
+  {
     id: "automl",
     title: "AutoML Platform",
     shortDescription:

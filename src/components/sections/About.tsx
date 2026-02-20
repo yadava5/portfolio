@@ -664,7 +664,7 @@ export function About() {
                 <div className="flex h-full flex-col justify-between p-6 py-8">
                   <div className="space-y-8">
                     <StatBar
-                      value={8}
+                      value={9}
                       maxValue={10}
                       label="Projects Built"
                       gradientFrom="#8b5cf6"
