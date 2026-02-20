@@ -208,6 +208,22 @@ body {
   }
 }
 
+/* Blink animation for typewriter cursor */
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
 /* Fallback for browsers without @property support */
 @supports not (background: paint(something)) {
   @keyframes holo-rotate-fallback {

@@ -16,7 +16,7 @@
 import { cn } from "@/lib/utils";
 import { personalInfo, socialLinks } from "@/lib/data/personal";
 import { ParticlesBg } from "@/components/ui";
-import { MagneticButton, ScrambleText } from "@/components/effects";
+import { MagneticButton, TypewriterText } from "@/components/effects";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
@@ -235,16 +235,16 @@ export function Hero() {
           {personalInfo.tagline}
         </p>
 
-        {/* Subtitle / short bio with scramble effect */}
+        {/* Subtitle / short bio with typewriter effect */}
         <p
           ref={subtitleRef}
           className="text-foreground-muted mx-auto mb-8 max-w-2xl text-base md:text-lg"
         >
-          <ScrambleText
+          <TypewriterText
             text={personalInfo.bio[0].replace(/\*\*/g, "")}
             delay={800}
-            speed={80}
-            scrambleDuration={1200}
+            speed={30}
+            cursorClassName="bg-violet-400"
           />
         </p>
 
