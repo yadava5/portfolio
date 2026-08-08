@@ -22,11 +22,13 @@
 
 name: CI
 
+# Manual-only since this repository was retired. The pipeline below checks and
+# builds the Next.js app under src/, which is no longer published — Pages now
+# serves the static redirect in redirect/. Running it on push would gate a
+# retired repository on the health of code nobody deploys. The code is kept, so
+# the pipeline is kept too, but you have to ask for it.
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 # Cancel in-progress runs when a new commit is pushed
 concurrency:

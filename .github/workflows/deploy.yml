@@ -1,5 +1,17 @@
 # GitHub Pages deployment workflow
-# Builds Next.js as static export and deploys to GitHub Pages
+#
+# This repository is retired. The portfolio it used to build now lives at
+# ayush-yadav.com, served from the Portfolio-2.0 repository.
+#
+# The Next.js application under src/ is deliberately left in place — the point
+# of retiring rather than deleting was to keep the code — but it is no longer
+# built or published. What Pages serves is the two-file redirect in redirect/,
+# so that any link still pointing at yadava5.github.io/portfolio/ lands on the
+# new site instead of a 404. See redirect/index.html for why this is a client
+# redirect and not a 301.
+#
+# To bring the old site back: restore the build/upload steps below from git
+# history (the last commit that had them) and point the artifact path at ./out.
 
 name: Deploy to GitHub Pages
 
@@ -8,50 +20,30 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Sets permissions for GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build static export
-        run: npm run build
-        env:
-          NODE_ENV: production
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
-
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload redirect
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./redirect
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

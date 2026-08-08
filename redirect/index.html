@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ayush Yadav — this site has moved</title>
+
+    <!-- This portfolio now lives at ayush-yadav.com. GitHub Pages cannot issue a
+         real 301 for this repository: a true server redirect is only available
+         through the custom-domain mechanism, and ayush-yadav.com is already
+         claimed by the Portfolio-2.0 repository, which a domain may belong to
+         only once. So the move is signalled three ways instead:
+           - rel=canonical, which is what search engines consolidate on;
+           - meta refresh, which works with JavaScript disabled;
+           - location.replace, which is instant and leaves no history entry,
+             so Back does not bounce the reader straight back here.
+         The visible link below is the fallback for anything that honours none
+         of the three. -->
+    <link rel="canonical" href="https://ayush-yadav.com/" />
+    <meta http-equiv="refresh" content="0; url=https://ayush-yadav.com/" />
+
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-content: center;
+        gap: 0.75rem;
+        text-align: center;
+        padding: 2rem;
+        font: 16px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: #fbfaf8;
+        color: #23201c;
+      }
+      a { color: inherit; text-underline-offset: 3px; }
+      p { margin: 0; }
+      .muted { opacity: 0.65; font-size: 0.875rem; }
+      @media (prefers-color-scheme: dark) {
+        body { background: #16150f; color: #ece7dd; }
+      }
+    </style>
+  </head>
+  <body>
+    <p>This portfolio has moved.</p>
+    <p><a href="https://ayush-yadav.com/">ayush-yadav.com</a></p>
+    <p class="muted">Redirecting you now &mdash; follow the link if nothing happens.</p>
+    <script>
+      location.replace("https://ayush-yadav.com/");
+    </script>
+  </body>
+</html>
